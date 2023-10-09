@@ -18,7 +18,7 @@ namespace TravelWebService.Services
                 userDatabaseSettings.Value.DatabaseName);
 
             _reservationCollection = mongoDatabase.GetCollection<Reservations>(
-                userDatabaseSettings.Value.trainCollectionName);
+                userDatabaseSettings.Value.resevertionCollectionName);
         }
 
         public async Task<List<Reservations>> GetAsync() =>

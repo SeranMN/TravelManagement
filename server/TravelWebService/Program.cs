@@ -9,6 +9,7 @@ builder.Services.Configure<UserDatabaseSettings>(
 builder.Services.AddSingleton<UserService>();
 builder.Services.AddSingleton<TrainService>();
 builder.Services.AddSingleton<ScheduleService>();
+builder.Services.AddSingleton<ReservationServices>();
 
 
 // Add services to the container.

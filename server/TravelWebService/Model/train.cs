@@ -13,10 +13,12 @@ namespace TravelWebService.Model
         [BsonElement("Name")]
         public string Name { get; set; } = string.Empty;
 
-        [BsonElement("From")]
-        public string From { get; set; } = string.Empty;
+        [BsonElement("SeatCount")]
+        public int SeatCount { get; set; } = 0;
 
-       
+
+
+
 
     }
 }

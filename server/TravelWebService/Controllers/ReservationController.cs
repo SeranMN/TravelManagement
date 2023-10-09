@@ -5,7 +5,7 @@ using TravelWebService.Services;
 namespace TravelWebService.Controllers
 {
     [ApiController]
-    [Route("api/User")]
+    [Route("api/[controller]")]
     public class ReservationController: ControllerBase
     {
         private readonly ReservationServices _usersService;

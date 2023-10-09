@@ -28,7 +28,7 @@ namespace TravelWebService.Services
             await _trainCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
 
         public async Task CreateAsync(train newTrain) =>
-            await _trainCollection.InsertOneAsync(newTrain);
+             _trainCollection.InsertOne(newTrain);
 
         public async Task UpdateAsync(string id, train updatedTrain) =>
             await _trainCollection.ReplaceOneAsync(x => x.Id == id, updatedTrain);
