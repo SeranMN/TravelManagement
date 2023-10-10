@@ -79,7 +79,7 @@ const Registration = () => {
                     <CardContent
                         component="img"
                         src="/logo.png"
-                        height={"100"}
+                        height={"150"}
                         width={"100"}
                     />
 
