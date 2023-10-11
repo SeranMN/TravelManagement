@@ -19,5 +19,11 @@ namespace TravelWebService.Model
 
         [BsonElement("AravingTime")]
         public string AravingTime { get; set; } = string.Empty;
+
+        [BsonElement("From")]
+        public string From { get; set; } = string.Empty;
+
+        [BsonElement("To")]
+        public string To { get; set; } = string.Empty;
     }
 }

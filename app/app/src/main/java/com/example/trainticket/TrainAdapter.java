@@ -41,7 +41,7 @@ public class TrainAdapter extends RecyclerView.Adapter<TrainAdapter.ViewHolder> 
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            nameTextView = itemView.findViewById(R.id.nameTextView);
+            nameTextView = itemView.findViewById(R.id.arrivingTextView);
 
         }
     }

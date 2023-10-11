@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="Town_array">
+        <item>Anuradhapura</item>
+        <item>Colombo</item>
+        <item>Jaffna</item>
+        <item>Galle</item>
+        <item>Matara</item>
+        <item>Kandy</item>
+        <item>Elle</item>
+        <item>Trinco</item>
+    </string-array>
+</resources>
