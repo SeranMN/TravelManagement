@@ -89,7 +89,7 @@ const TrainTable = ({handleClickOpen, setEdit, setData, toggle }) => {
                                     <EditIcon />
                                 </IconButton>
                             </TableCell>
-                            <TableCell align="center" sx={{fontWeight: "700", color: row.status === true ? "green" : "red"}} >
+                            <TableCell align="center" sx={{fontWeight: "500", color: row.status === true ? "green" : "red"}} >
                                 {row.status === true ? "Acive" : "Deactive"}
                             </TableCell>
 
