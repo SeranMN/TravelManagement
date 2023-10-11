@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ReservationFromFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/linearLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="64dp"
+                android:layout_marginTop="40dp"
+                android:text="From"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintBaseline_toBaselineOf="@+id/spinner_from"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Spinner
+                android:id="@+id/spinner_from"
+                android:layout_width="225dp"
+                android:layout_height="56dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginEnd="36dp"
+                android:layout_marginBottom="16dp"
+                android:entries="@array/Town_array"
+                app:layout_constraintBottom_toTopOf="@+id/spinner_to"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.948"
+                app:layout_constraintStart_toEndOf="@+id/textView4"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="1.0" />
+
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="64dp"
+                android:text="To"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@+id/spinner_to"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+            <Spinner
+                android:id="@+id/spinner_to"
+                android:layout_width="225dp"
+                android:layout_height="55dp"
+                android:layout_marginEnd="38dp"
+                android:layout_marginBottom="16dp"
+                android:entries="@array/Town_array"
+                app:layout_constraintBottom_toTopOf="@+id/button_findTrain"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <Button
+                android:id="@+id/button_findTrain"
+                android:layout_width="154dp"
+                android:layout_height="62dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="32dp"
+                android:text="Find Train"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.959"
+                app:layout_constraintStart_toEndOf="@+id/textView5"
+                app:layout_constraintTop_toBottomOf="@+id/textView5" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <ScrollView
+            android:id="@+id/scrollView2"
+            android:layout_width="360dp"
+            android:layout_height="189dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="24dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.333"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/schedule_re_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </ScrollView>
+
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="107dp"
+            android:layout_height="34dp"
+            android:layout_marginTop="24dp"
+            android:text="Enter Date"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/textView_date"
+            app:layout_constraintHorizontal_bias="0.721"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/scrollView2" />
+
+        <TextView
+            android:id="@+id/textView_date"
+            android:layout_width="145dp"
+            android:layout_height="33dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="36dp"
+            android:hint="Enter Date"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintBaseline_toBaselineOf="@+id/textView6"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/scrollView2" />
+
+        <TextView
+            android:id="@+id/textView9"
+            android:layout_width="133dp"
+            android:layout_height="28dp"
+            android:layout_marginTop="16dp"
+            android:text="Pasenger Count"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/spinner"
+            app:layout_constraintHorizontal_bias="0.656"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView6" />
+
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_width="146dp"
+            android:layout_height="36dp"
+            android:layout_marginEnd="36dp"
+            android:entries="@array/Count_array"
+            app:layout_constraintBaseline_toBaselineOf="@+id/textView9"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <Button
+            android:id="@+id/button_done"
+            android:layout_width="154dp"
+            android:layout_height="62dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="32dp"
+            android:text="Done"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinner" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

@@ -28,7 +28,7 @@ namespace TravelWebService.Services
             await _reservationCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
 
         public async Task CreateAsync(Reservations newReservation) =>
-            await _reservationCollection.InsertOneAsync(newReservation);
+             _reservationCollection.InsertOne(newReservation);
 
         public async Task UpdateAsync(string id, Reservations updatedReservation) =>
             await _reservationCollection.ReplaceOneAsync(x => x.Id == id, updatedReservation);

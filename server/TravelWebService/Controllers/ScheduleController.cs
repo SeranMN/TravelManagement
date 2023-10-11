@@ -73,5 +73,13 @@ namespace TravelWebService.Controllers
             return NoContent();
         }
 
+        [HttpGet("/tour")]
+        public async Task<List<Shedule>> GetByTour(string from, string to)
+        {
+            var schedule = await _sheduleService.FindSchedules(from, to);
+
+            return schedule;
+        }
+
     }
 }

@@ -27,13 +27,21 @@ namespace TravelWebService.Services
         public async Task<Shedule?> GetAsync(string id) =>
             await _sheduleCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
 
-        public async Task CreateAsync(Shedule newShedule) =>
-            await _sheduleCollection.InsertOneAsync(newShedule);
+        public Task CreateAsync(Shedule newShedule)
+        {
+            _sheduleCollection.InsertOne(newShedule);
+            return Task.CompletedTask;
+        }
 
         public async Task UpdateAsync(string id, Shedule updatedShedule) =>
             await _sheduleCollection.ReplaceOneAsync(x => x.Id == id, updatedShedule);
 
         public async Task RemoveAsync(string id) =>
             await _sheduleCollection.DeleteOneAsync(x => x.Id == id);
+
+        public async Task<List<Shedule>> FindSchedules(string from, string to)
+        {
+            return await _sheduleCollection.Find(filter: x => x.Start == from & x.End == to).ToListAsync();
+        }
     }
 }
