@@ -11,6 +11,15 @@ builder.Services.AddSingleton<TrainService>();
 builder.Services.AddSingleton<ScheduleService>();
 builder.Services.AddSingleton<ReservationServices>();
 
+// ConfigureServices method
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowReactApp",
+        builder => builder.WithOrigins("http://localhost:3000")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+        );
+});
 
 // Add services to the container.
 
@@ -27,6 +36,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors("AllowReactApp");
 
 app.UseHttpsRedirection();
 
