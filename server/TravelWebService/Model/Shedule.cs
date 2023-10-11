@@ -23,5 +23,11 @@ namespace TravelWebService.Model
 
         [BsonElement("DepatureTime")]
         public string DepatureTime { get; set; } = string.Empty;
+
+        [BsonElement("Intermediate")]
+        public List<string> Intermediate { get; set; } = new List<string>();
+
+        [BsonElement("Status")]
+        public bool Status { get; set; } = false;
     }
 }

@@ -1,5 +1,6 @@
 ﻿
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Driver;
 using TravelWebService.Model;
 using TravelWebService.Services;
 
@@ -34,9 +35,26 @@ namespace TravelWebService.Controller
         [HttpPost]
         public async Task<IActionResult> Post(User newUser)
         {
-            await _usersService.CreateAsync(newUser);
+            try
+            {
+                await _usersService.CreateAsync(newUser);
 
-            return CreatedAtAction(nameof(Get), new { id = newUser.Id }, newUser);
+                return CreatedAtAction(nameof(Get), new { id = newUser.Id }, newUser);
+            }   
+            
+            catch (MongoWriteException ex)
+            {
+                if (ex.WriteError.Category == ServerErrorCategory.DuplicateKey)
+                {
+                    // Handle the case of a duplicate NIC
+                    return BadRequest("User creation failed: Duplicate NIC No.");
+                }
+                else
+                {
+                    return StatusCode(500, "An error occurred while creating the user.");
+                }
+            }
+           
         }
 
         [HttpPut("{id:length(24)}")]
