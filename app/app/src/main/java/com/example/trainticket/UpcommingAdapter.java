@@ -19,11 +19,15 @@ import retrofit2.Response;
 
 public class UpcommingAdapter extends RecyclerView.Adapter<UpcommingAdapter.ViewHolder>{
     private List<Reservation> upcommingReservations;
+    private OnItemClickListener listener;
     private ApiService apiService = RetrofitClient.getRetrofitInstance().create(ApiService.class);
 
     public  UpcommingAdapter (List <Reservation> reservations){
         this.upcommingReservations = reservations;
         notifyDataSetChanged();
+    }
+    public interface OnItemClickListener {
+        void onItemClick(int position);
     }
     public void removeItem(int position) {
 
@@ -48,9 +52,9 @@ public class UpcommingAdapter extends RecyclerView.Adapter<UpcommingAdapter.View
            }
        });
     }
-    public void upDate(int position){
-        ReservationUpdateFragment fragment = new ReservationUpdateFragment();
 
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
     }
 
     @NonNull
@@ -88,6 +92,17 @@ public class UpcommingAdapter extends RecyclerView.Adapter<UpcommingAdapter.View
             timeTextView = itemView.findViewById(R.id.textViewTime);
             fromTextView = itemView.findViewById(R.id.TextViewArriving);
             toTexTView = itemView.findViewById(R.id.textViewDep);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (listener != null) {
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            listener.onItemClick(position);
+                        }
+                    }
+                }
+            });
 
         }
 

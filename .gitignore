@@ -33,3 +33,4 @@ local.properties
 /server/TravelWebService/obj/Debug/net6.0/TravelWebService.genruntimeconfig.cache
 /server/TravelWebService/obj/Debug/net6.0/TravelWebService.pdb
 /server/TravelWebService/.vs/TravelWebService/DesignTimeBuild/.dtbcache.v2
+server/TravelWebService/.vs/TravelWebService/v17/.futdcache.v1

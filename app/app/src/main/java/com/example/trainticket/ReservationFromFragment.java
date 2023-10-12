@@ -92,7 +92,6 @@ public class ReservationFromFragment extends Fragment {
             }
         });
 
-
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -120,7 +119,9 @@ public class ReservationFromFragment extends Fragment {
                     }
                 });
             }
+
         });
+
 
 
 
@@ -160,25 +161,21 @@ public class ReservationFromFragment extends Fragment {
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                reservation = new Reservation("Traveler",slectedSchedule.getTrainId(),Date,slectedSchedule.getArivingTime(),sFrom,sTo);
-                Call<Reservation> call = apiService.createReservation(reservation);
+                ConfirmFragment fragment = new ConfirmFragment();
+                Bundle bundle = new Bundle();
 
-                call.enqueue(new Callback<Reservation>() {
-                    @Override
-                    public void onResponse(Call<Reservation> call, Response<Reservation> response) {
-                        if(response.isSuccessful()){
-                            Toast.makeText(getContext(),"Reservation Successfully added", Toast.LENGTH_SHORT);
-                            Log.i(TAG,"Successfully added: "+response.message());
-                        }else {
-                            Log.e(TAG,"Error Occurred: "+response.message());
-                        }
-                    }
+                bundle.putString("ReservationDate", Date);
+                bundle.putString("ReservationFrom", sFrom);
+                bundle.putString("ReservationTo", sTo);
+                bundle.putString("trainId", slectedSchedule.getTrainId());
 
-                    @Override
-                    public void onFailure(Call<Reservation> call, Throwable t) {
-                        Log.e(TAG,"Error Occurred: "+t);
-                    }
-                });
+                fragment.setArguments(bundle);
+                getFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.frameLayout,fragment)
+                        .addToBackStack(null)
+                        .commit();
+
             }
         });
 

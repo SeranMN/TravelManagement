@@ -1,13 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="Town_array">
-        <item>Anuradhapura</item>
-        <item>Colombo</item>
-        <item>Jaffna</item>
+        <item>Fort</item>
+        <item>Secretartat Halt</item>
+        <item>Kompnnavidiya</item>
+        <item>Kollupitiya</item>
+        <item>Bambalapitiya</item>
+        <item>Wellawatte</item>
+        <item>Dehiwala</item>
+        <item>Mount Laviniya</item>
+        <item>Rathmalana</item>
+        <item>Angulana</item>
+        <item>Lunawa</item>
+        <item>Moratuwa</item>
+        <item>Koralawella</item>
+        <item>Egodauyana</item>
+        <item>Panadura</item>
+        <item>Pinwatte</item>
+        <item>Wadduwa</item>
+        <item>Train Halt 01</item>
+        <item>Kalutara North</item>
+        <item>Kaluthara South</item>
+        <item>Katukurunda</item>
+        <item>Payagala North</item>
+        <item>Payagala South</item>
+        <item>Maggona</item>
+        <item>Beruwala</item>
+        <item>Hettimulla</item>
+        <item>Aluthgama</item>
+        <item>Bentota</item>
+        <item>Induruwa</item>
+        <item>Mha Induruwa</item>
+        <item>Kosgoda</item>
+        <item>Piyagama</item>
+        <item>Ahungalle</item>
+        <item>Patagamgoda</item>
+        <item>Balapitiya</item>
+        <item>Andadola</item>
+        <item>Kandegoda</item>
+        <item>Ambalangoda</item>
+        <item>Madampagama</item>
+        <item>Akurala</item>
+        <item>Kahawa</item>
+        <item>Telwatte</item>
+        <item>Seenigama</item>
+        <item>Hikkaduwa</item>
+        <item>Thiranagama</item>
+        <item>Kumarakanda</item>
+        <item>Dodanduwa</item>
+        <item>Rathgama</item>
+        <item>Boossa</item>
+        <item>Ginthota</item>
+        <item>Piyadigama</item>
+        <item>Richmond Hill</item>
         <item>Galle</item>
+        <item>Katugoda</item>
+        <item>Unawatuna</item>
+        <item>Taple</item>
+        <item>Habaraduwa</item>
+        <item>Koggala</item>
+        <item>Kathaluwa</item>
+        <item>Ahangama</item>
+        <item>Midigama</item>
+        <item>Kumbalgama</item>
+        <item>Weligama</item>
+        <item>Polwathumodara</item>
+        <item>Mirissa</item>
+        <item>Kamburugamuwa</item>
+        <item>Walgama</item>
         <item>Matara</item>
-        <item>Kandy</item>
-        <item>Elle</item>
-        <item>Trinco</item>
+        <item>Piliduwa</item>
     </string-array>
 </resources>

@@ -137,13 +137,13 @@
             android:text="Pasenger Count"
             android:textSize="16sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toStartOf="@+id/spinner"
+            app:layout_constraintEnd_toStartOf="@+id/spinner_count"
             app:layout_constraintHorizontal_bias="0.656"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
         <Spinner
-            android:id="@+id/spinner"
+            android:id="@+id/spinner_count"
             android:layout_width="146dp"
             android:layout_height="36dp"
             android:layout_marginEnd="36dp"
@@ -159,7 +159,7 @@
             android:layout_marginEnd="32dp"
             android:text="Done"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/spinner" />
+            app:layout_constraintTop_toBottomOf="@+id/spinner_count" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

@@ -19,25 +19,48 @@ public class Reservation {
         this.from= from;
         this.to = to;
     }
+    public Reservation(){
+
+    };
 
     public String getId() {
         return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getTraveler() {
         return traveler;
     }
 
+    public void setTraveler(String traveler) {
+        this.traveler = traveler;
+    }
+
     public String getTrain() {
         return train;
+    }
+
+    public void setTrain(String train) {
+        this.train = train;
     }
 
     public String getDate() {
         return date;
     }
 
+    public void setDate(String date) {
+        this.date = date;
+    }
+
     public String getAravingTime() {
         return aravingTime;
+    }
+
+    public void setAravingTime(String aravingTime) {
+        this.aravingTime = aravingTime;
     }
 
     public String getFrom() {

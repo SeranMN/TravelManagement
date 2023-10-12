@@ -1,10 +1,12 @@
 package com.example.trainticket;
 import java.util.List;
 import retrofit2.Call;
+import retrofit2.CallAdapter;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -29,4 +31,8 @@ public interface ApiService {
 
     @DELETE("/api/Reservation/{id}")
     Call<Void> deleteUpcoming(@Path("id") String id);
+
+    @PUT("/api/Reservation/{id}")
+    Call<Void> updateReservation(@Path("id") String id, @Body Reservation body);
+
 }
