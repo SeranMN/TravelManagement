@@ -50,7 +50,8 @@ const Registration = () => {
             phoneNumber: phone,
             gender: gender,
             address: address,
-            role: "TravelAgent",
+            role: "Travel Agent",
+            status: true
         }
 
         axios.post('http://localhost:5000/api/user', user)
