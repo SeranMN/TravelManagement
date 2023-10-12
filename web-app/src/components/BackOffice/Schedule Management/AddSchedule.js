@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 import PropTypes from 'prop-types';
@@ -9,6 +9,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
+import { Chip } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
@@ -17,6 +18,8 @@ import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
+import CancelIcon from "@mui/icons-material/Cancel";
+import CheckIcon from "@mui/icons-material/Check";
 import TextareaAutosize from '@mui/material/TextareaAutosize';
 import axios from 'axios'
 import MenuItem from '@mui/material/MenuItem';
@@ -69,8 +72,34 @@ BootstrapDialogTitle.propTypes = {
     onClose: PropTypes.func.isRequired,
 };
 
-const AddSchedule = ({ open, handleClickOpen, handleClose, edit, setEdit, data, setData }) => {
-    const [open1, setOpen1] = React.useState(false);
+const AddSchedule = ({ open, handleClickOpen, handleClose, edit, setEdit, data, setData, toggle, setToggle }) => {
+    const [open1, setOpen1] = useState(false);
+    const [severity, SetSeverity] = useState("");
+    const [msg, setMsg] = useState("");
+    const [trains, setTrains] = useState()
+
+    const stations = [
+        "Fort", "Secretartat Halt", "Kompnnavidiya", "Kollupitiya", "Bambalapitiya", "Wellawatte", "Dehiwala", "Mount Laviniya",
+        "Rathmalana", "Angulana", "Lunawa", "Moratuwa", "Koralawella", "Egodauyana", "Panadura", "Pinwatte", "Wadduwa", "Train Halt 01",
+        "Kalutara North", "Kaluthara South", "Katukurunda", "Payagala North", "Payagala South", "Maggona", "Beruwala", "Hettimulla", "Aluthgama",
+        "Bentota", "Induruwa", "Mha Induruwa", "Kosgoda", "Piyagama", "Ahungalle", "Patagamgoda", "Balapitiya", "Andadola", "Kandegoda",
+        "Ambalangoda", "Madampagama", "Akurala", "Kahawa", "Telwatte", "Seenigama", "Hikkaduwa", "Thiranagama", "Kumarakanda", "Dodanduwa",
+        "Rathgama", "Boossa", "Ginthota", "Piyadigama", "Richmond Hill", "Galle", "Katugoda", "Unawatuna", "Taple", "Habaraduwa", "Koggala",
+        "Kathaluwa", "Ahangama", "Midigama", "Kumbalgama", "Weligama", "Polwathumodara", "Mirissa", "Kamburugamuwa", "Walgama", "Matara", "Piliduwa"
+    ];
+
+    useEffect(() => {
+        const getTrains = async () => {
+            axios.get('http://localhost:5000/api/train')
+            .then((res) => { 
+              setTrains(res.data) 
+              console.log('res.data',res.data)
+            })
+            .catch((err) => console.log(err))
+        }
+        getTrains()
+   
+    }, [])
 
     const handleClose1 = (event, reason) => {
         if (reason === 'clickaway') {
@@ -84,6 +113,36 @@ const AddSchedule = ({ open, handleClickOpen, handleClose, edit, setEdit, data, 
         setOpen1(true);
     };
 
+    const handlIntermediate = (e) => {
+
+    }
+
+    const validationForCreate = Yup.object({
+        trainID: Yup.string()
+            .required('Required'),
+        from: Yup.string()
+            .required('Required'),
+        to: Yup.string()
+            .required('Required'),
+        arrivalTime: Yup.string()
+            .required('Required'),
+        depatureTime: Yup.string()
+            .required('Required'),
+        scheduleStatus: Yup.string()
+            .required('Required'),
+    })
+
+    const validationForUpdate = Yup.object({
+        trainID: Yup.string()
+            .required('Required'),
+        from: Yup.string()
+            .required('Required'),
+        to: Yup.string()
+            .required('Required'),
+        scheduleStatus: Yup.string()
+            .required('Required'),
+    })
+
     return (
         <>
             <Snackbar open={open1} autoHideDuration={5000} onClose={handleClose1} anchorOrigin={{
@@ -91,8 +150,8 @@ const AddSchedule = ({ open, handleClickOpen, handleClose, edit, setEdit, data, 
                 horizontal: "center"
             }}>
 
-                <Alert onClose={handleClose1} severity="success" sx={{ width: '100%' }}>
-                    The Schedule has been sucessfully added
+                <Alert onClose={handleClose1} severity={severity} sx={{ width: '100%' }}>
+                    {msg}
                 </Alert>
             </Snackbar>
 
@@ -110,26 +169,78 @@ const AddSchedule = ({ open, handleClickOpen, handleClose, edit, setEdit, data, 
                 </BootstrapDialogTitle>
                 <Formik
                     initialValues={{
-                        trainID: data ? data.trainName : '',
-                        from: data ? data.from : '',
-                        to: data ? data.to : '',
-                        arrivalTime: data ? data.arrivalTime : '',
+                        trainID: data ? data.trainId : '',
+                        from: data ? data.start : '',
+                        to: data ? data.end : '',
+                        intermediate: data ? data.intermediate : [],
+                        arrivalTime: data ? data.arivingTime : '',
                         depatureTime: data ? data.depatureTime : '',
-                        scheduleStatus: data ? data.scheduleStatus : '',
+                        scheduleStatus: data ? data.status : '',
                     }}
-                    validationSchema={Yup.object({
-                        trainID: Yup.string()
-                            .required('Required'),
-                        from: data ? data.from : '',
-                        to: data ? data.to : '',
-                        arrivalTime: data ? data.arrivalTime : '',
-                        depatureTime: data ? data.depatureTime : '',
-                        scheduleStatus: data ? data.scheduleStatus : '',
-
-                    })}
-                    onSubmit={(values, { setSubmitting }) => {
+                    validationSchema={ !edit ?  validationForCreate : validationForUpdate}
+                    onSubmit={(values) => {
                         console.log(values)
-
+                 
+                        if (edit) {
+                            console.log(data)
+                            const schedule = {
+                                trainId: values.trainID,
+                                start: values.from,
+                                end: values.to,
+                                arivingTime: values.arrivalTime,
+                                depatureTime: values.depatureTime,
+                                intermediate: values.intermediate,
+                                status: values.scheduleStatus
+                            }
+                            axios.put(`http://localhost:5000/api/schedule/${data.id}`, schedule)
+                                .then(() => {
+                                    setMsg("The Schedule has been sucessfully Edited")
+                                    SetSeverity("success");
+                                    handleClick()
+                                    setToggle(!toggle)
+                                    handleClose()
+                                }).catch((err) => {
+                                    setMsg("oops! Somthing Went Wrong")
+                                    SetSeverity("error");
+                                    handleClick()
+                                })
+                        }
+                        else {
+                            const ahours = values.arrivalTime.$d.getHours();
+                            const aminutes = values.arrivalTime.$d.getMinutes();
+                            const aformattedHours = ahours % 12 || 12;
+                            const arrivalampm = ahours >= 12 ? 'P.M.' : 'A.M.';
+    
+                            const dhours = values.depatureTime.$d.getHours();
+                            const dminutes = values.depatureTime.$d.getMinutes();
+                            const dformattedHours = dhours % 12 || 12;
+                            const depatureampm = dhours >= 12 ? 'P.M.' : 'A.M.';
+    
+                            const arrivalTime = `${aformattedHours}:${aminutes} ${arrivalampm}`
+                            const depatureTime = `${dformattedHours}:${dminutes} ${depatureampm}`
+                            
+                            const schedule = {
+                                trainId: values.trainID,
+                                start: values.from,
+                                end: values.to,
+                                arivingTime: arrivalTime,
+                                depatureTime: depatureTime,
+                                intermediate: values.intermediate,
+                                status: values.scheduleStatus
+                            }
+                            axios.post('http://localhost:5000/api/schedule', schedule)
+                                .then(() => {
+                                    setMsg("The Schedule has been sucessfully added")
+                                    SetSeverity("success");
+                                    handleClick()
+                                    setToggle(!toggle)
+                                    handleClose()
+                                }).catch((err) => {
+                                    setMsg("oops! Somthing Went Wrong")
+                                    SetSeverity("error");
+                                    handleClick()
+                                })
+                        }
                     }}
                 >
                     {props => (
@@ -146,10 +257,18 @@ const AddSchedule = ({ open, handleClickOpen, handleClose, edit, setEdit, data, 
                                             value={props.values.trainID}
                                             onChange={props.handleChange}
                                             style={{ width: 258 }}
+                                            MenuProps={{
+                                                sx: {
+                                                  height: 300,
+                                                },
+                                            }}
 
                                         >
-                                            <MenuItem value={"213123"}>Samudra</MenuItem>
-                                            <MenuItem value={"4523435"}>Samudra</MenuItem>
+                                            {trains && trains?.map((train , index) => (
+                                                <MenuItem key={index} value={train.id}>
+                                                    {train.name}
+                                                </MenuItem>
+                                            ))}
                                         </Select>
                                     </FormControl>
 
@@ -168,10 +287,17 @@ const AddSchedule = ({ open, handleClickOpen, handleClose, edit, setEdit, data, 
                                             value={props.values.from}
                                             onChange={props.handleChange}
                                             style={{ width: 258 }}
-
+                                            MenuProps={{
+                                                sx: {
+                                                  height: 300,
+                                                },
+                                            }}
                                         >
-                                            <MenuItem value={"213123"}>Samudra</MenuItem>
-                                            <MenuItem value={"4523435"}>Samudra</MenuItem>
+                                            {stations && stations?.map((st , index) => (
+                                                <MenuItem key={index} value={st}>
+                                                    {st}
+                                                </MenuItem>
+                                            ))}
                                         </Select>
                                     </FormControl>
                                 </Stack>
@@ -189,10 +315,18 @@ const AddSchedule = ({ open, handleClickOpen, handleClose, edit, setEdit, data, 
                                             value={props.values.to}
                                             onChange={props.handleChange}
                                             style={{ width: 258 }}
+                                            MenuProps={{
+                                                sx: {
+                                                  height: 300,
+                                                },
+                                            }}
 
                                         >
-                                            <MenuItem value={"213123"}>Samudra</MenuItem>
-                                            <MenuItem value={"4523435"}>Samudra</MenuItem>
+                                            {stations && stations?.map((st, index) => (
+                                                <MenuItem key={index} value={st}>
+                                                    {st}
+                                                </MenuItem>
+                                            ))}
                                         </Select>
                                     </FormControl>
                                 </Stack>
@@ -201,33 +335,83 @@ const AddSchedule = ({ open, handleClickOpen, handleClose, edit, setEdit, data, 
                                 </ErrorMessage>
 
                                 <Stack direction="row" spacing={8} alignItems='center' mt={4}>
-                                    <FormLabel sx={{ color: "black", minWidth: '105px' }}>Depature Time</FormLabel>
-                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                        <TimePicker
-                                            value={props.values.depatureTime}
-                                            onChange={value => props.setFieldValue("depatureTime", value)}
-                                            renderInput={(params) => <TextField {...params} />}
-                                        />
-                                    </LocalizationProvider>
+                                    <FormLabel sx={{ color: "black", minWidth: '105px' }}>Intermediate Stations:</FormLabel>
+                                    <FormControl fullWidth>
+                                        <Select
+                                            id="demo-simple-select"
+                                            name='to'
+                                            multiple
+                                            value={props.values.intermediate}
+                                            onChange={(e) => props.setFieldValue("intermediate", e.target.value)}
+                                            style={{ width: 258 }}
+                                            renderValue={(selected) => (
+                                                <Stack gap={1} direction="row" flexWrap="wrap">
+                                                  {selected.map((value) => (
+                                                      <Chip
+                                                          key={value}
+                                                          label={value}
+                                                          onDelete={() =>
+                                                            props.setFieldValue("intermediate", props.values.intermediate.filter((item) => item !== value ))
+                                                          }
+                                                          deleteIcon={
+                                                              <CancelIcon
+                                                                  onMouseDown={(event) => event.stopPropagation()}
+                                                              />
+                                                          }
+                                                      />
+                                                  ))}
+                                                </Stack>
+                                            )}
+                                            MenuProps={{
+                                                sx: {
+                                                  height: 300,
+                                                },
+                                            }}
+                                        >
+                                            {stations && stations?.map((st, index) => (
+                                                <MenuItem key={index} value={st}>
+                                                    {st}
+                                                </MenuItem>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
                                 </Stack>
-                                <ErrorMessage name="depatureTime">
-                                    {msg => <div style={{ color: 'red' }} className="film-details-input-validation">{msg}</div>}
-                                </ErrorMessage>
 
-                                <Stack direction="row" spacing={8} alignItems='center' mt={4}>
-                                    <FormLabel sx={{ color: "black", minWidth: '105px' }}>Arrival Time</FormLabel>
-                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                        <TimePicker
-                                            value={props.values.arrivalTime}
-                                            onChange={value => props.setFieldValue("arrivalTime", value)}
-                                            renderInput={(params) => <TextField {...params} />}
-                                        />
-                                    </LocalizationProvider>
-                                </Stack>
-                                <ErrorMessage name="arrivalTime">
-                                    {msg => <div style={{ color: 'red' }} className="film-details-input-validation">{msg}</div>}
-                                </ErrorMessage>
+                                {!edit &&
+                                    <>
+                                        <Stack direction="row" spacing={8} alignItems='center' mt={4}>
+                                            <FormLabel sx={{ color: "black", minWidth: '105px' }}>Depature Time</FormLabel>
+                                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                                <TimePicker
+                                                    value={props.values.depatureTime}
+                                                    onChange={value => props.setFieldValue("depatureTime", value)}
+                                                    renderInput={(params) => <TextField {...params} />}
+                                                />
+                                            </LocalizationProvider>
+                                        </Stack>
+                                        <ErrorMessage name="depatureTime">
+                                            {msg => <div style={{ color: 'red' }} className="film-details-input-validation">{msg}</div>}
+                                        </ErrorMessage>
+                                    </>
+                                }
 
+                                {!edit &&
+                                    <>
+                                        <Stack direction="row" spacing={8} alignItems='center' mt={4}>
+                                            <FormLabel sx={{ color: "black", minWidth: '105px' }}>Arrival Time</FormLabel>
+                                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                                <TimePicker
+                                                    value={props.values.arrivalTime}
+                                                    onChange={value => props.setFieldValue("arrivalTime", value)}
+                                                    renderInput={(params) => <TextField {...params} />}
+                                                />
+                                            </LocalizationProvider>
+                                        </Stack>
+                                        <ErrorMessage name="arrivalTime">
+                                            {msg => <div style={{ color: 'red' }} className="film-details-input-validation">{msg}</div>}
+                                        </ErrorMessage>
+                                    </>
+                                }
 
                                 <Stack direction="row" spacing={8} alignItems='center' mt={4}>
                                     <FormLabel sx={{ color: "black", minWidth: '105px' }}>Status :</FormLabel>
@@ -241,8 +425,8 @@ const AddSchedule = ({ open, handleClickOpen, handleClose, edit, setEdit, data, 
                                             style={{ width: 258 }}
 
                                         >
-                                            <MenuItem value={"Publish"}>Publish</MenuItem>
-                                            <MenuItem value={"Not Published"}>Not Published</MenuItem>
+                                            <MenuItem value={true}>Publish</MenuItem>
+                                            <MenuItem value={false}>Not Published</MenuItem>
                                         </Select>
                                     </FormControl>
 

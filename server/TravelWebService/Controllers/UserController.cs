@@ -1,5 +1,6 @@
 ﻿
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Driver;
 using TravelWebService.Model;
 using TravelWebService.Services;
 
@@ -34,41 +35,56 @@ namespace TravelWebService.Controller
         [HttpPost]
         public async Task<IActionResult> Post(User newUser)
         {
-            await _usersService.CreateAsync(newUser);
+            try
+            {
+                await _usersService.CreateAsync(newUser);
 
-            return CreatedAtAction(nameof(Get), new { id = newUser.Id }, newUser);
+                return CreatedAtAction(nameof(Get), new { id = newUser.Id }, newUser);
+            }   
+            
+            catch (MongoWriteException ex)
+            {
+                if (ex.WriteError.Category == ServerErrorCategory.DuplicateKey)
+                {
+                    // Handle the case of a duplicate NIC
+                    return BadRequest("User creation failed: Duplicate NIC No.");
+                }
+                else
+                {
+                    return StatusCode(500, "An error occurred while creating the user.");
+                }
+            }
+           
         }
 
-        [HttpPut("{id:length(24)}")]
-        public async Task<IActionResult> Update(string id, User updatedBook)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(string id, User updatedUser)
         {
-            var book = await _usersService.GetAsync(id);
+            var user = await _usersService.GetAsync(id);
 
-            if (book is null)
+            if (user is null)
             {
                 return NotFound();
             }
 
-            updatedBook.Id = book.Id;
+            await _usersService.UpdateAsync(id, updatedUser);
 
-            await _usersService.UpdateAsync(id, updatedBook);
-
-            return NoContent();
+            return Ok("User has been successfully Edited.");
         }
 
-        [HttpDelete("{id:length(24)}")]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(string id)
         {
-            var book = await _usersService.GetAsync(id);
+            var user = await _usersService.GetAsync(id);
 
-            if (book is null)
+            if (user is null)
             {
                 return NotFound();
             }
 
             await _usersService.RemoveAsync(id);
 
-            return NoContent();
+            return Ok("User has been successfully deleted.");
         }
 
     }

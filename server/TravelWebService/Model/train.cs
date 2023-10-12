@@ -16,6 +16,9 @@ namespace TravelWebService.Model
         [BsonElement("SeatCount")]
         public int SeatCount { get; set; } = 0;
 
+        [BsonElement("Status")]
+        public bool Status { get; set; } = false;
+
 
 
 

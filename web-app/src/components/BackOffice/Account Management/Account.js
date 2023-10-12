@@ -14,14 +14,15 @@ import DialogContent from '@mui/material/DialogContent';
 import { styled } from '@mui/material/styles';
 import CloseIcon from '@mui/icons-material/Close';
 import PropTypes from 'prop-types';
-import * as Yup from 'yup';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
-import FormLabel from '@mui/material/FormLabel';
-import Stack from '@mui/material/Stack';
-import MenuItem from '@mui/material/MenuItem';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-import TextField from '@mui/material/TextField';
+import axios from 'axios'
+import EditUsers from "./EditUsers";
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+import DeleteAccountModel from "./DeleteAccountModel";
 
+const Alert = React.forwardRef(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
@@ -63,8 +64,41 @@ BootstrapDialogTitle.propTypes = {
 
 const Account = () => {
 
-  const [open, setOpen] = React.useState(false);
-  const [editStatus, setEditStatus] = React.useState(null);
+  const [open, setOpen] = useState(false);
+  const [editStatus, setEditStatus] = useState(null);
+  const [data, setData] = useState(null);
+  const [users, setUsers] = useState()
+  const [toggle, setToggle] = useState(false);
+  const [open1, setOpen1] = useState(false);
+  const [severity, SetSeverity] = useState("");
+  const [msg, setMsg] = useState("");
+  const [deleteModel, setDeleteModel] = useState(false);
+  const [deleteId, setDeleteId] = useState()
+
+  const handleClose1 = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen1(false);
+  };
+
+  const handleClick = () => {
+    setOpen1(true);
+  };
+
+  useEffect(() => {
+    const getUsers = async () => {
+      await axios.get('http://localhost:5000/api/user')
+        .then((res) => {
+          setUsers(res.data)
+          console.log('res.data', res.data)
+        })
+        .catch((err) => console.log(err))
+    }
+    getUsers()
+
+  }, [toggle])
 
 
   const handleClickOpen = () => {
@@ -75,102 +109,25 @@ const Account = () => {
     setOpen(false);
   };
 
-
-  const buses = [
-    {
-      id: 1,
-      trainName: "samudra",
-      seatcount: 4,
-      description: "Adsasda iouasgbha daibdiad",
-      status: "Active"
-    },
-    {
-      id: 2,
-      trainName: "samudra",
-      seatcount: 4,
-      description: "Adsasda iouasgbha daibdiad",
-      status: "Active"
-    },
-    {
-      id: 3,
-      trainName: "samudra",
-      seatcount: 4,
-      description: "Adsasda iouasgbha daibdiad",
-      status: "Deactive"
-    },
-    {
-      id: 4,
-      trainName: "samudra",
-      seatcount: 4,
-      description: "Adsasda iouasgbha daibdiad",
-      status: "Deactive"
-    }
-  ]
-
   const handleEdit = (rowData) => {
     setOpen(true)
     setEditStatus(rowData.status)
+    setData(rowData)
+  }
+
+  const handleDelete = (rowID) => {
+    setDeleteModel(true)
+    setDeleteId(rowID)
+  }
+
+  const handleCloseDelete = () => {
+    setDeleteModel(false)
+
   }
 
   return (
     <Box>
-      <BootstrapDialog
-        onClose={handleClose}
-        aria-labelledby="customized-dialog-title"
-        open={open}
-      >
-        <BootstrapDialogTitle id="customized-dialog-title" onClose={handleClose}>
-          Change Status
-        </BootstrapDialogTitle>
-        <Formik
-                    initialValues={{
-                      status: editStatus? editStatus : ''
-                    }}
-                    validationSchema={Yup.object({
-                      status: Yup.string()
-                      .required('Required')
-                    })}
-                    onSubmit={(values, { setSubmitting }) => {
-                        console.log(values)
 
-                    }}
-                >
-                    {props => (
-                        <Form>
-                            <DialogContent dividers>
-                                <Stack direction="row" spacing={8} alignItems='center' mt={4} mb={3}>
-                                    <FormLabel sx={{ color: "black", minWidth: '105px' }}>Status :</FormLabel>
-                                    <Select
-                                        id="demo-simple-select"
-                                        name='status'
-                                        label="Status"
-                                        value={props.values.status}
-                                        onChange={props.handleChange}
-                                        style={{ width: 258 }}
-                                    >
-                                        <MenuItem value={"Active"}>Active</MenuItem>
-                                        <MenuItem value={"Deactive"}>Deactive</MenuItem>
-                                    </Select>
-                                </Stack>
-                                <ErrorMessage name="status">
-                                    {msg => <div style={{ color: 'red' }} className="film-details-input-validation">{msg}</div>}
-                                </ErrorMessage>
-
-                            </DialogContent>
-                            <div style={{ margin: '15px' }}>
-                                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                    <Button autoFocus onClick={handleClose} variant='contained' color="error">
-                                        Close
-                                    </Button>
-                                    <Button type='submit' autoFocus variant='contained'>
-                                        Change
-                                    </Button>
-                                </div>
-                            </div>
-                        </Form>
-                    )}
-                </Formik>
-      </BootstrapDialog>
       <Grid container sx={{ mb: 4 }}>
         <Grid item xs={12} md={10} lg={10}>
           <Typography sx={{
@@ -183,13 +140,26 @@ const Account = () => {
           </Typography>
         </Grid>
       </Grid>
+      <Snackbar open={open1} autoHideDuration={3000} onClose={handleClose1} anchorOrigin={{
+        vertical: "top",
+        horizontal: "center"
+      }}>
 
+        <Alert onClose={handleClose1} severity={severity} sx={{ width: '100%' }}>
+          {msg}
+        </Alert>
+      </Snackbar>
+      {open &&
+        <EditUsers handleClose={handleClose} open={open} data={data} setToggle={setToggle} toggle={toggle}
+          SetSeverity={SetSeverity} setMsg={setMsg} handleClick={handleClick} />
+      }
+      {deleteModel &&
+        <DeleteAccountModel handleCloseDelete={handleCloseDelete} deleteModel={deleteModel} userId={deleteId} 
+        setToggle={setToggle} toggle={toggle} SetSeverity={SetSeverity} setMsg={setMsg} handleClick={handleClick}/>
+      }
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell align="center" sx={{ color: "#1A2857", fontWeight: "600", fontFamily: 'Proxima-Nova', fontSize: 15 }}>
-              User ID
-            </TableCell>
             <TableCell align="center" sx={{ color: "#1A2857", fontWeight: "600", fontFamily: 'Proxima-Nova', fontSize: 15 }}>
               NIC No
             </TableCell>
@@ -197,13 +167,25 @@ const Account = () => {
               Name
             </TableCell>
             <TableCell align="center" sx={{ color: "#1A2857", fontWeight: "600", fontFamily: 'Proxima-Nova', fontSize: 15 }}>
+              Role
+            </TableCell>
+            <TableCell align="center" sx={{ color: "#1A2857", fontWeight: "600", fontFamily: 'Proxima-Nova', fontSize: 15 }}>
+              Email
+            </TableCell>
+            <TableCell align="center" sx={{ color: "#1A2857", fontWeight: "600", fontFamily: 'Proxima-Nova', fontSize: 15 }}>
+              Contact No
+            </TableCell>
+            <TableCell align="center" sx={{ color: "#1A2857", fontWeight: "600", fontFamily: 'Proxima-Nova', fontSize: 15 }}>
               Gender
             </TableCell>
             <TableCell align="center" sx={{ color: "#1A2857", fontWeight: "600", fontFamily: 'Proxima-Nova', fontSize: 15 }}>
-              City
+              Address
             </TableCell>
             <TableCell align="center" sx={{ color: "#1A2857", fontWeight: "600", fontFamily: 'Proxima-Nova', fontSize: 15 }}>
               Edit
+            </TableCell>
+            <TableCell align="center" sx={{ color: "#1A2857", fontWeight: "600", fontFamily: 'Proxima-Nova', fontSize: 15 }}>
+              Delete
             </TableCell>
             <TableCell align="center" sx={{ color: "#1A2857", fontWeight: "600", fontFamily: 'Proxima-Nova', fontSize: 15 }}>
               Status
@@ -212,7 +194,7 @@ const Account = () => {
         </TableHead>
 
         <TableBody>
-          {buses.map((row) => (
+          {users && users.map((row) => (
             <TableRow
               key={row.id}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -222,25 +204,37 @@ const Account = () => {
                 scope="row"
                 align="center"
               >
-                {row.id}
+                {row.id.toUpperCase()}
               </TableCell>
               <TableCell
                 component="th"
                 scope="row"
                 align="center"
               >
-                {row.trainName}
+                {row.name}
               </TableCell>
-              <TableCell align="center" >{row.seatcount}</TableCell>
+              <TableCell
+                component="th"
+                scope="row"
+                align="center"
+              >
+                {row.role}
+              </TableCell>
+              <TableCell align="center">
+                {row.email}
+              </TableCell>
+              <TableCell align="center">
+                {row.phoneNumber}
+              </TableCell>
               <TableCell
                 align="center"
               >
-                {row.trainName}
+                {row.gender}
               </TableCell>
               <TableCell
                 align="center"
               >
-                {row.trainName}
+                {row.address}
               </TableCell>
               <TableCell align="center" sx={{ fontWeight: "500", fontFamily: "Proxima-Nova" }}>
                 <IconButton
@@ -252,10 +246,21 @@ const Account = () => {
                   <EditIcon />
                 </IconButton>
               </TableCell>
-
-              <TableCell align="center" sx={{ fontWeight: "700", color: row.status === "Active" ? "green" : "red" }} >
-                {row.status}
+              <TableCell align="center" sx={{ fontWeight: "500", fontFamily: "Proxima-Nova" }}>
+                <IconButton
+                  aria-label="delete"
+                  size="large"
+                  color="error"
+                  onClick={() => handleDelete(row.id)}
+                >
+                  <DeleteIcon />
+                </IconButton>
               </TableCell>
+
+              <TableCell align="center" sx={{ fontWeight: "600", color: row.status === true ? "green" : "red" }} >
+                {row.status === true ? "Acive" : "Deactive"}
+              </TableCell>
+
 
             </TableRow>
           ))}

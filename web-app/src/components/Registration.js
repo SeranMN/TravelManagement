@@ -17,8 +17,11 @@ const Registration = () => {
     const [name, setName] = useState('');
     const [NIC, setNIC] = useState();
     const [gender, setGender] = useState();
-    const [city, setCity] = useState();
+    const [email, setEmail] = useState();
+    const [phone, setPhone] = useState();
+    const [address, setAddress] = useState();
     const [pwd, setPwd] = useState();
+    const [confirmPwd, setConfirmPwd] = useState();
     const vertical = 'bottom'
     const horizontal = 'right'
 
@@ -40,27 +43,33 @@ const Registration = () => {
     };
 
     const onSubmit = () => {
-        // const user = {
-        //   firstName:firstName,
-        //   lastName:lastName,
-        //   dob:dob,
-        //   email:email,
-        //   occupation:occupation,
-        //   gender:gender,
-        //   city:city
-        // }
+        const user = {
+            id: NIC,
+            name: name,
+            email: email,
+            phoneNumber: phone,
+            gender: gender,
+            address: address,
+            role: "Travel Agent",
+            status: true
+        }
 
-        // axios.post('http://localhost:5000/user/add', user)
-        //   .then(() => {
-        //   setMsg("Successfully Added user");
-        //     SetSeverity("success");
-        //     setOpenSnack(true);
-        //   }).catch((err) => {
-        //   setMsg("oops! Somthing Went Wrong");
-        //     SetSeverity("error");
-        //     setOpenSnack(true);
-        //     console.log(err);
-        // })
+        axios.post('http://localhost:5000/api/user', user)
+            .then(() => {
+                setMsg("Successfully Added user");
+                SetSeverity("success");
+                setOpenSnack(true);
+            }).catch((err) => {
+                if (err.response && err.response.status === 400) {
+                    setMsg(err.response.data);
+                    SetSeverity("error");
+                    setOpenSnack(true);
+                } else {
+                    setMsg("oops! Somthing Went Wrong");
+                    SetSeverity("error");
+                    setOpenSnack(true);
+                }
+            })
     }
 
     return (
@@ -72,7 +81,8 @@ const Registration = () => {
                     backgroundColor: "white",
                     textAlign: 'center',
                     display: 'flex',
-                    alignItems: 'center'
+                    alignItems: 'center',
+                    m:3
                 }}
             >
                 <Card sx={{ width: 650 }}>
@@ -136,12 +146,38 @@ const Registration = () => {
                     <CardContent>
                         <TextField
                             id="filled-basic"
-                            label="City"
+                            label="Email"
                             variant="filled"
                             sx={{ width: 600 }}
-                            value={city}
+                            value={email}
                             onChange={(e) => {
-                                setCity(e.target.value)
+                                setEmail(e.target.value)
+                            }}
+                        />
+                    </CardContent>
+
+                    <CardContent>
+                        <TextField
+                            id="filled-basic"
+                            label="Contact No"
+                            variant="filled"
+                            sx={{ width: 600 }}
+                            value={phone}
+                            onChange={(e) => {
+                                setPhone(e.target.value)
+                            }}
+                        />
+                    </CardContent>
+
+                    <CardContent>
+                        <TextField
+                            id="filled-basic"
+                            label="Address"
+                            variant="filled"
+                            sx={{ width: 600 }}
+                            value={address}
+                            onChange={(e) => {
+                                setAddress(e.target.value)
                             }}
                         />
                     </CardContent>
@@ -156,6 +192,20 @@ const Registration = () => {
                             value={pwd}
                             onChange={(e) => {
                                 setPwd(e)
+                            }}
+                        />
+                    </CardContent>
+
+                    <CardContent>
+                        <TextField
+                            id="filled-basic"
+                            label="Confirm Password"
+                            variant="filled"
+                            type={'password'}
+                            sx={{ width: 600 }}
+                            value={confirmPwd}
+                            onChange={(e) => {
+                                setConfirmPwd(e)
                             }}
                         />
                     </CardContent>

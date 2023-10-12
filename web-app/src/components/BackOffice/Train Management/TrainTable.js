@@ -8,39 +8,23 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import axios from 'axios'
 
-const TrainTable = ({handleClickOpen, setEdit, setData }) => {
+const TrainTable = ({handleClickOpen, setEdit, setData, toggle }) => {
+    const [trains, setTrains] = useState()
 
-    const buses = [
-        {
-            id: 1,
-            trainName: "samudra",
-            seatcount: 4,
-            description: "Adsasda iouasgbha daibdiad",
-            status: "Active"
-        },
-        {
-            id: 2,
-            trainName: "samudra",
-            seatcount: 4,
-            description: "Adsasda iouasgbha daibdiad",
-            status: "Active"
-        },
-        {
-            id: 3,
-            trainName: "samudra",
-            seatcount: 4,
-            description: "Adsasda iouasgbha daibdiad",
-            status: "Deactive"
-        },
-        {
-            id: 4,
-            trainName: "samudra",
-            seatcount: 4,
-            description: "Adsasda iouasgbha daibdiad",
-            status: "Deactive"
+    useEffect(() => {
+        const getTrains = async () => {
+            axios.get('http://localhost:5000/api/train')
+            .then((res) => { 
+              setTrains(res.data) 
+              console.log('res.data',res.data)
+            })
+            .catch((err) => console.log(err))
         }
-    ]
+        getTrains()
+   
+    }, [toggle])
 
     const handleEdit = (rowData) => {
         handleClickOpen();
@@ -56,7 +40,7 @@ const TrainTable = ({handleClickOpen, setEdit, setData }) => {
                         fontSize: "22px",
                         fontWeight: "600",
                         mt: 3,
-                        textAlign: 'center'
+                        textAlign: 'left'
                     }}>
                         Listed Trains
                     </Typography>
@@ -66,9 +50,6 @@ const TrainTable = ({handleClickOpen, setEdit, setData }) => {
             <Table>
                 <TableHead>
                     <TableRow>
-                        <TableCell align="center" sx={{ color: "#1A2857", fontWeight: "600", fontFamily: 'Proxima-Nova', fontSize: 15 }}>
-                            Train ID
-                        </TableCell>
                         <TableCell align="center" sx={{ color: "#1A2857", fontWeight: "600", fontFamily: 'Proxima-Nova', fontSize: 15 }}>
                             Train Name
                         </TableCell>
@@ -85,26 +66,19 @@ const TrainTable = ({handleClickOpen, setEdit, setData }) => {
                 </TableHead>
 
                 <TableBody>
-                    {buses.map((row) => (
+                    {trains && trains.map((row) => (
                         <TableRow
                             key={row.id}
                             sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                         >
-                             <TableCell
-                                component="th"
-                                scope="row"
-                                align="center"
-                            >
-                                {row.id}
-                            </TableCell>
                             <TableCell
                                 component="th"
                                 scope="row"
                                 align="center"
                             >
-                                {row.trainName}
+                                {row.name}
                             </TableCell>
-                            <TableCell align="center" >{row.seatcount}</TableCell>
+                            <TableCell align="center" >{row.seatCount}</TableCell>
                             <TableCell align="center" sx={{ fontWeight: "500", fontFamily: "Proxima-Nova" }}>
                                 <IconButton
                                     aria-label="delete"
@@ -115,8 +89,8 @@ const TrainTable = ({handleClickOpen, setEdit, setData }) => {
                                     <EditIcon />
                                 </IconButton>
                             </TableCell>
-                            <TableCell align="center" sx={{fontWeight: "700", color: row.status === "Active" ? "green" : "red"}} >
-                                {row.status}
+                            <TableCell align="center" sx={{fontWeight: "500", color: row.status === true ? "green" : "red"}} >
+                                {row.status === true ? "Acive" : "Deactive"}
                             </TableCell>
 
                         </TableRow>

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 import PropTypes from 'prop-types';
@@ -65,8 +65,10 @@ BootstrapDialogTitle.propTypes = {
     onClose: PropTypes.func.isRequired,
 };
 
-const AddTrain = ({open, handleClickOpen, handleClose, edit, setEdit, data, setData }) => {
-    const [open1, setOpen1] = React.useState(false);
+const AddTrain = ({open, handleClickOpen, handleClose, edit, setEdit, data, setData, toggle, setToggle }) => {
+    const [open1, setOpen1] = useState(false);
+    const [severity, SetSeverity] = useState("");
+    const [msg, setMsg] = useState("");
 
     const handleClose1 = (event, reason) => {
         if (reason === 'clickaway') {
@@ -82,13 +84,13 @@ const AddTrain = ({open, handleClickOpen, handleClose, edit, setEdit, data, setD
 
     return (
         <>
-            <Snackbar open={open1} autoHideDuration={5000} onClose={handleClose1} anchorOrigin={{
+            <Snackbar open={open1} autoHideDuration={3000} onClose={handleClose1} anchorOrigin={{
                 vertical: "top",
                 horizontal: "center"
             }}>
 
-                <Alert onClose={handleClose1} severity="success" sx={{ width: '100%' }}>
-                    The Train has been sucessfully added
+                <Alert onClose={handleClose1} severity={severity} sx={{ width: '100%' }}>
+                    {msg}
                 </Alert>
             </Snackbar>
 
@@ -106,8 +108,8 @@ const AddTrain = ({open, handleClickOpen, handleClose, edit, setEdit, data, setD
                 </BootstrapDialogTitle>
                 <Formik
                     initialValues={{
-                        trainName: data ? data.trainName : '',
-                        seatcount: data ? data.seatcount : '',
+                        trainName: data ? data.name : '',
+                        seatcount: data ? data.seatCount : '',
                         status: data ? data.status : '',
                     }}
                     validationSchema={Yup.object({
@@ -115,13 +117,51 @@ const AddTrain = ({open, handleClickOpen, handleClose, edit, setEdit, data, setD
                             .required('Required'),
                         seatcount: Yup.string()
                             .required('Required'),
-                        status: Yup.string()
+                        status: Yup.bool()
                             .required('Required')
 
                     })}
-                    onSubmit={(values, { setSubmitting }) => {
-                        console.log(values)
-
+                    onSubmit={(values) => {
+                        if(edit) {
+                            console.log(data)
+                            const train = {
+                                name: values.trainName,
+                                seatCount: values.seatcount,
+                                status: values.status
+                            }
+                            axios.put(`http://localhost:5000/api/train/${data.id}`, train)
+                            .then(() => {
+                                setMsg("The Train has been sucessfully Edited")
+                                SetSeverity("success");
+                                handleClick()
+                                setToggle(!toggle)
+                                handleClose()
+                            }).catch((err) => {
+                                setMsg("oops! Somthing Went Wrong")
+                                SetSeverity("error");
+                                handleClick()
+                            })
+                        }
+                        else {
+                            const train = {
+                                name: values.trainName,
+                                seatCount: values.seatcount,
+                                status: values.status
+                            }
+                            axios.post('http://localhost:5000/api/train', train)
+                            .then(() => {
+                                setMsg("The Train has been sucessfully added")
+                                SetSeverity("success");
+                                handleClick()
+                                setToggle(!toggle)
+                                handleClose()
+                            }).catch((err) => {
+                                setMsg("oops! Somthing Went Wrong")
+                                SetSeverity("error");
+                                handleClick()
+                            })
+                        }
+                     
                     }}
                 >
                     {props => (
@@ -152,8 +192,8 @@ const AddTrain = ({open, handleClickOpen, handleClose, edit, setEdit, data, setD
                                         onChange={props.handleChange}
                                         style={{ width: 258 }}
                                     >
-                                        <MenuItem value={"Active"}>Active</MenuItem>
-                                        <MenuItem value={"Deactive"}>Deactive</MenuItem>
+                                        <MenuItem value={true}>Active</MenuItem>
+                                        <MenuItem value={false}>Deactive</MenuItem>
                                     </Select>
                                 </Stack>
                                 <ErrorMessage name="status">
