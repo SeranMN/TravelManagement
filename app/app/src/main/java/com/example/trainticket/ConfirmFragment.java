@@ -23,7 +23,7 @@ import retrofit2.Response;
 
 public class ConfirmFragment extends Fragment {
 
-    private Reservation reservation;
+    private Reservation reservation = new Reservation();
     private ApiService apiService = RetrofitClient.getRetrofitInstance().create(ApiService.class);
 
     public ConfirmFragment() {
@@ -46,7 +46,7 @@ public class ConfirmFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_confirm, container, false);
         Bundle args = getArguments();
         if (args != null) {
-            reservation.setId(args.getString("ReservationId"));
+
             reservation.setFrom(args.getString("ReservationFrom")) ;
             reservation.setDate(args.getString("ReservationDate"));
             reservation.setTo(args.getString("ReservationTo"));
@@ -70,8 +70,8 @@ public class ConfirmFragment extends Fragment {
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                Call<Reservation> call = apiService.createReservation(reservation);
+                Reservation newReservation = new Reservation("Tra","train",reservation.getDate(),reservation.getAravingTime(),reservation.getFrom(),reservation.getTo());
+                Call<Reservation> call = apiService.createReservation(newReservation);
 
                 call.enqueue(new Callback<Reservation>() {
                     @Override

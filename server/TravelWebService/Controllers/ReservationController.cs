@@ -48,10 +48,19 @@ namespace TravelWebService.Controllers
             {
                 return NotFound();
             }
+            DateTime date1 = DateTime.ParseExact(reservation.Date, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+            DateTime date = DateTime.Today;
+            if (date.AddDays(5) < date1)
+            {
+                updatedReservation.Id = reservation.Id;
 
-            updatedReservation.Id = reservation.Id;
-
-            await _usersService.UpdateAsync(id, updatedReservation);
+                await _usersService.UpdateAsync(id, updatedReservation);
+            }
+            else
+            {
+                return BadRequest("The reservation cannot be deleted because it is less than 5 days away.");
+            }
+           
 
             return NoContent();
         }

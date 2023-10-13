@@ -38,7 +38,7 @@ namespace TravelWebService.Controllers
         {
             await _sheduleService.CreateAsync(Schedule);
 
-            return CreatedAtAction(nameof(Get), new { id = Schedule.Id }, Schedule);
+            return CreatedAtAction(nameof(Get), Schedule);
         }
 
         [HttpPut("{id:length(24)}")]

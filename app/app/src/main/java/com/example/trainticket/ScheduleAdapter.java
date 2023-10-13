@@ -39,6 +39,8 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
         Schedule schedule = schedules.get(position);
         holder.arrivingTime.setText("Arriving: "+schedule.getArivingTime());
         holder.departureTime.setText("Departure: "+schedule.getDepatureTime());
+        holder.start.setText(schedule.getStart()+" to ");
+        holder.end.setText( schedule.getEnd());
         holder.itemView.setOnClickListener(v -> {
             if (listener!= null) {
                 listener.onItemClick(schedule, position);
@@ -72,11 +74,15 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView arrivingTime;
         TextView departureTime;
+        TextView start;
+        TextView end;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             arrivingTime = itemView.findViewById(R.id.arrivingTextView);
             departureTime = itemView.findViewById(R.id.textViewDepTime);
+            start = itemView.findViewById(R.id.textView_start);
+            end = itemView.findViewById(R.id.textView_end);
 
         }
     }
