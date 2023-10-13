@@ -2,6 +2,8 @@ package com.example.trainticket;
 
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -51,8 +53,10 @@ public class UpcommingFragment extends Fragment {
 
         layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
+        SharedPreferences preferences = getActivity().getSharedPreferences("session_data", Context.MODE_PRIVATE);
+        String userId = preferences.getString("id", "");
 
-        apiService.getUpcoming().enqueue(new Callback<List<Reservation>>() {
+        apiService.getUpcoming(userId).enqueue(new Callback<List<Reservation>>() {
             @Override
             public void onResponse(Call<List<Reservation>> call, Response<List<Reservation>> response) {
                 if(response.isSuccessful()){

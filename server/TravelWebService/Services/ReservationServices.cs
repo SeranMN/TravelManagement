@@ -35,5 +35,11 @@ namespace TravelWebService.Services
 
         public async Task RemoveAsync(string id) =>
             await _reservationCollection.DeleteOneAsync(x => x.Id == id);
+
+        public async Task<List<Reservations>> GetByCreatedUser (string id) =>
+          await _reservationCollection.Find(x => x.CreatedBy == id).ToListAsync();
+
+        public async Task<List<Reservations>> GetBySchedule (string id) =>
+         await _reservationCollection.Find(x => x.ScheduleID == id).ToListAsync();
     }
 }

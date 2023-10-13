@@ -14,10 +14,13 @@ namespace TravelWebService.Controllers
         public ReservationController(ReservationServices reservationServices) =>
             _usersService = reservationServices;
 
+        //Get All Reservations
+
         [HttpGet]
         public async Task<List<Reservations>> Get() =>
             await _usersService.GetAsync();
 
+        //Get Specific Reservation
         [HttpGet("{id:length(24)}")]
         public async Task<ActionResult<Reservations>> Get(string id)
         {
@@ -31,6 +34,7 @@ namespace TravelWebService.Controllers
             return book;
         }
 
+        //Create Reservation
         [HttpPost]
         public async Task<IActionResult> Post(Reservations newReservation)
         {
@@ -38,6 +42,8 @@ namespace TravelWebService.Controllers
 
             return CreatedAtAction(nameof(Get), new { id = newReservation.Id }, newReservation);
         }
+
+        //Update Reservation
 
         [HttpPut("{id:length(24)}")]
         public async Task<IActionResult> Update(string id, Reservations updatedReservation)
@@ -55,16 +61,18 @@ namespace TravelWebService.Controllers
                 updatedReservation.Id = reservation.Id;
 
                 await _usersService.UpdateAsync(id, updatedReservation);
+
+                return Ok("Reservation has been successfully Edited.");
             }
             else
             {
                 return BadRequest("The reservation cannot be deleted because it is less than 5 days away.");
             }
-           
 
-            return NoContent();
+
         }
 
+        //Delete Reservation
         [HttpDelete("{id:length(24)}")]
         public async Task<IActionResult> Delete(string id)
         {
@@ -90,11 +98,11 @@ namespace TravelWebService.Controllers
 
             return NoContent();
         }
-
-        [HttpGet("/getUpcoming")]
-        public List<Reservations> getUpcommingRservations()
+        //Get Upcoming Reservation
+        [HttpGet("getUpcoming/{id}")]
+        public List<Reservations> getUpcommingRservations(string id)
         {
-            var reservations = _usersService.GetAsync().Result.ToList();
+            var reservations = _usersService.GetByCreatedUser(id).Result.ToList();
 
             DateTime date = DateTime.Today;
             
@@ -111,10 +119,11 @@ namespace TravelWebService.Controllers
 
             return sortedlist;
         }
-        [HttpGet("/getHistory")]
-        public List<Reservations> getHistoryRservations()
+        //Get History of Reservations
+        [HttpGet("getHistory/{id}")]
+        public List<Reservations> getHistoryRservations(string id)
         {
-            var reservations = _usersService.GetAsync().Result.ToList();
+            var reservations = _usersService.GetByCreatedUser(id).Result.ToList();
 
             DateTime date = DateTime.Now;
 
@@ -122,6 +131,26 @@ namespace TravelWebService.Controllers
             reservations.ForEach(reservation => {
                 DateTime date1 = DateTime.ParseExact(reservation.Date, "dd/MM/yyyy", CultureInfo.InvariantCulture);
                 if (date > date1)
+                {
+                    sortedlist.Add(reservation);
+                }
+            });
+
+
+            return sortedlist;
+        }
+
+        [HttpGet("getUpcoming/schedule/{id}")]
+        public List<Reservations> getUpcommingRservationsBySchedule(string id)
+        {
+            var reservations = _usersService.GetBySchedule(id).Result.ToList();
+
+            DateTime date = DateTime.Today;
+
+            List<Reservations> sortedlist = new List<Reservations>();
+            reservations.ForEach(reservation => {
+                DateTime date1 = DateTime.ParseExact(reservation.Date, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                if (date < date1)
                 {
                     sortedlist.Add(reservation);
                 }

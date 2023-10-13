@@ -12,26 +12,34 @@ namespace TravelWebService.Controller
     {
         private readonly UserService _usersService;
 
+       
         public UserController(UserService usersService) =>
             _usersService = usersService;
-
+        //Get All Users
         [HttpGet]
         public async Task<List<User>> Get() =>
             await _usersService.GetAsync();
-
-        [HttpGet("{id:length(24)}")]
-        public async Task<ActionResult<User>> Get(string id)
+        //Login
+        [HttpGet("{id}")]
+        public async Task<ActionResult<User>> Get(string id, string password)
         {
-            var book = await _usersService.GetAsync(id);
+            var user = await _usersService.GetAsync(id);
 
-            if (book is null)
+            if (user is null)
             {
                 return NotFound();
             }
-
-            return book;
+            else if (user.Password.Equals(password))
+             {
+                    return user;
+             }
+             else
+               {
+                    return BadRequest("pawssword not valid");
+             }
+            
         }
-
+        // Create User
         [HttpPost]
         public async Task<IActionResult> Post(User newUser)
         {
@@ -56,7 +64,7 @@ namespace TravelWebService.Controller
             }
            
         }
-
+        //Update User
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(string id, User updatedUser)
         {
@@ -71,7 +79,7 @@ namespace TravelWebService.Controller
 
             return Ok("User has been successfully Edited.");
         }
-
+        // Delete USer
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(string id)
         {

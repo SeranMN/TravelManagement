@@ -5,19 +5,39 @@ public class Reservation {
     private String traveler;
     private String train;
     private String date;
-    private String aravingTime;
+    private String arivingTime;
 
     private String from;
     private String to;
+    private String createdBy;
+    private String count;
 
-    public Reservation(String traveler, String train, String date, String aravingTime, String from, String to) {
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public String getCount() {
+        return count;
+    }
+
+    public void setCount(String count) {
+        this.count = count;
+    }
+
+    public Reservation(String traveler, String train, String date, String aravingTime, String from, String to, String createdBy, String Count) {
 
         this.traveler = traveler;
         this.train = train;
         this.date = date;
-        this.aravingTime = aravingTime;
+        this.arivingTime = aravingTime;
         this.from= from;
         this.to = to;
+        this.createdBy = createdBy;
+        this. count = Count;
     }
     public Reservation(){
 
@@ -56,11 +76,11 @@ public class Reservation {
     }
 
     public String getAravingTime() {
-        return aravingTime;
+        return arivingTime;
     }
 
     public void setAravingTime(String aravingTime) {
-        this.aravingTime = aravingTime;
+        this.arivingTime = aravingTime;
     }
 
     public String getFrom() {

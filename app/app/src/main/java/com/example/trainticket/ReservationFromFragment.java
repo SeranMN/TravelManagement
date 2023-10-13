@@ -172,6 +172,8 @@ public class ReservationFromFragment extends Fragment {
                 bundle.putString("ReservationFrom", sFrom);
                 bundle.putString("ReservationTo", sTo);
                 bundle.putString("trainId", slectedSchedule.getTrainId());
+                bundle.putString("time", slectedSchedule.getArivingTime());
+                bundle.putString("count", "1");
 
                 fragment.setArguments(bundle);
                 getFragmentManager()

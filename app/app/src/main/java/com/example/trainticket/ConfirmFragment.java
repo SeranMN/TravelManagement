@@ -2,6 +2,8 @@ package com.example.trainticket;
 
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -51,6 +53,8 @@ public class ConfirmFragment extends Fragment {
             reservation.setDate(args.getString("ReservationDate"));
             reservation.setTo(args.getString("ReservationTo"));
             reservation.setId(args.getString("trainId"));
+            reservation.setCount(args.getString("count"));
+            reservation.setAravingTime(args.getString("time"));
         }
 
         TextView start = view.findViewById(R.id.textView_startStation);
@@ -70,7 +74,10 @@ public class ConfirmFragment extends Fragment {
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Reservation newReservation = new Reservation("Tra","train",reservation.getDate(),reservation.getAravingTime(),reservation.getFrom(),reservation.getTo());
+                SharedPreferences preferences = getActivity().getSharedPreferences("session_data", Context.MODE_PRIVATE);
+                String userId = preferences.getString("id", "");
+
+                Reservation newReservation = new Reservation(userId,"train",reservation.getDate(),reservation.getAravingTime(),reservation.getFrom(),reservation.getTo(),userId,reservation.getCount());
                 Call<Reservation> call = apiService.createReservation(newReservation);
 
                 call.enqueue(new Callback<Reservation>() {
