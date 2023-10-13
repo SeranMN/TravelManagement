@@ -13,11 +13,12 @@ namespace TravelWebService.Controllers
         public TrainController(TrainService TrainService) =>
 
             _TrainService = TrainService;
-
+        //Get All Trains
         [HttpGet]
         public async Task<List<train>> Get() =>
             await _TrainService.GetAsync();
 
+        //Get Train By Id
         [HttpGet("{id:length(24)}")]
         public async Task<ActionResult<train>> Get(string id)
         {
@@ -30,7 +31,7 @@ namespace TravelWebService.Controllers
 
             return train;
         }
-
+        //Create Train
         [HttpPost]
         public async Task<IActionResult> Post(train newTrain)
         {
@@ -38,7 +39,7 @@ namespace TravelWebService.Controllers
 
             return CreatedAtAction(nameof(Get), new { id = newTrain.Id }, newTrain);
         }
-
+        //Update Train
         [HttpPut("{id:length(24)}")]
         public async Task<IActionResult> Update(string id, train updatedTrain)
         {
@@ -55,7 +56,7 @@ namespace TravelWebService.Controllers
 
             return NoContent();
         }
-
+        //Delete Train
         [HttpDelete("{id:length(24)}")]
         public async Task<IActionResult> Delete(string id)
         {

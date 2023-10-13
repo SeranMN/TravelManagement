@@ -3,6 +3,7 @@ package com.example.trainticket;
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
 import android.app.DatePickerDialog;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -71,6 +72,8 @@ public class ReservationFromFragment extends Fragment {
         from.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                ((TextView) adapterView.getChildAt(0)).setTextColor(Color.WHITE);
+
                 sFrom = adapterView.getItemAtPosition(i).toString();
             }
 
@@ -83,6 +86,7 @@ public class ReservationFromFragment extends Fragment {
         to.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                ((TextView) adapterView.getChildAt(0)).setTextColor(Color.WHITE);
                 sTo = adapterView.getItemAtPosition(i).toString();
             }
 
@@ -91,7 +95,6 @@ public class ReservationFromFragment extends Fragment {
 
             }
         });
-
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,7 +123,9 @@ public class ReservationFromFragment extends Fragment {
                     }
                 });
             }
+
         });
+
 
 
 
@@ -160,25 +165,23 @@ public class ReservationFromFragment extends Fragment {
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                reservation = new Reservation("Traveler",slectedSchedule.getTrainId(),Date,slectedSchedule.getArivingTime(),sFrom,sTo);
-                Call<Reservation> call = apiService.createReservation(reservation);
+                ConfirmFragment fragment = new ConfirmFragment();
+                Bundle bundle = new Bundle();
 
-                call.enqueue(new Callback<Reservation>() {
-                    @Override
-                    public void onResponse(Call<Reservation> call, Response<Reservation> response) {
-                        if(response.isSuccessful()){
-                            Toast.makeText(getContext(),"Reservation Successfully added", Toast.LENGTH_SHORT);
-                            Log.i(TAG,"Successfully added: "+response.message());
-                        }else {
-                            Log.e(TAG,"Error Occurred: "+response.message());
-                        }
-                    }
+                bundle.putString("ReservationDate", Date);
+                bundle.putString("ReservationFrom", sFrom);
+                bundle.putString("ReservationTo", sTo);
+                bundle.putString("trainId", slectedSchedule.getTrainId());
+                bundle.putString("time", slectedSchedule.getArivingTime());
+                bundle.putString("count", "1");
 
-                    @Override
-                    public void onFailure(Call<Reservation> call, Throwable t) {
-                        Log.e(TAG,"Error Occurred: "+t);
-                    }
-                });
+                fragment.setArguments(bundle);
+                getFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.frameLayout,fragment)
+                        .addToBackStack(null)
+                        .commit();
+
             }
         });
 

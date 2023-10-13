@@ -18,7 +18,7 @@ namespace TravelWebService.Model
 
         [BsonElement("Status")]
         public bool Status { get; set; } = false;
-
+    
 
 
 

@@ -2,17 +2,21 @@ package com.example.trainticket;
 
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -49,8 +53,10 @@ public class UpcommingFragment extends Fragment {
 
         layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
+        SharedPreferences preferences = getActivity().getSharedPreferences("session_data", Context.MODE_PRIVATE);
+        String userId = preferences.getString("id", "");
 
-        apiService.getUpcoming().enqueue(new Callback<List<Reservation>>() {
+        apiService.getUpcoming(userId).enqueue(new Callback<List<Reservation>>() {
             @Override
             public void onResponse(Call<List<Reservation>> call, Response<List<Reservation>> response) {
                 if(response.isSuccessful()){
@@ -59,6 +65,25 @@ public class UpcommingFragment extends Fragment {
                     recyclerView.setAdapter(upcommingAdapter);
                     ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteCallback(upcommingAdapter));
                     itemTouchHelper.attachToRecyclerView(recyclerView);
+
+                    upcommingAdapter.setOnItemClickListener(new UpcommingAdapter.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(int position) {
+                            ReservationUpdateFragment fragment = new ReservationUpdateFragment();
+                            Bundle bundle = new Bundle();
+                            bundle.putString("ReservationId", reservations.get(position).getId());
+                            bundle.putString("ReservationDate", reservations.get(position).getDate());
+                            bundle.putString("ReservationFrom", reservations.get(position).getFrom());
+                            bundle.putString("ReservationTo", reservations.get(position).getTo());
+
+                            fragment.setArguments(bundle);
+                            getFragmentManager()
+                                    .beginTransaction()
+                                    .replace(R.id.frameLayout,fragment)
+                                    .addToBackStack(null)
+                                    .commit();
+                        }
+                    });
 
                 }else {
                     Log.e(TAG,"Error Occurred in onResponse : "+ response.message() );
