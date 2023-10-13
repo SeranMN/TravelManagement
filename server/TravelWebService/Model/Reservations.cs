@@ -9,21 +9,33 @@ namespace TravelWebService.Model
         public string? Id { get; set; }
 
         [BsonElement("TravelerID")]
-        public string Traveler { get; set; } = string.Empty;
+        public string TravelerID { get; set; } = string.Empty;
 
         [BsonElement("TrainID")]
-        public string Train { get; set; } = string.Empty;
+        public string TrainID { get; set; } = string.Empty;
+
+        [BsonElement("ScheduleID")]
+        public string ScheduleID { get; set; } = string.Empty;
 
         [BsonElement("Date")]
         public string Date { get; set; } = string.Empty;
 
-        [BsonElement("AravingTime")]
-        public string AravingTime { get; set; } = string.Empty;
+        [BsonElement("ArivingTime")]
+        public string ArivingTime { get; set; } = string.Empty;
+
+        [BsonElement("DepatureTime")]
+        public string DepatureTime { get; set; } = string.Empty;
 
         [BsonElement("From")]
         public string From { get; set; } = string.Empty;
 
         [BsonElement("To")]
         public string To { get; set; } = string.Empty;
+
+        [BsonElement("Count")]
+        public string Count { get; set; } = string.Empty;
+
+        [BsonElement("CreatedBy")]
+        public string CreatedBy { get; set; } = string.Empty;
     }
 }

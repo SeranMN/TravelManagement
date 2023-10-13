@@ -48,12 +48,22 @@ namespace TravelWebService.Controllers
             {
                 return NotFound();
             }
+            DateTime date1 = DateTime.ParseExact(reservation.Date, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+            DateTime date = DateTime.Today;
+            if (date.AddDays(5) < date1)
+            {
+                updatedReservation.Id = reservation.Id;
 
-            updatedReservation.Id = reservation.Id;
+                await _usersService.UpdateAsync(id, updatedReservation);
 
-            await _usersService.UpdateAsync(id, updatedReservation);
+                return Ok("Reservation has been successfully Edited.");
+            }
+            else
+            {
+                return BadRequest("The reservation cannot be deleted because it is less than 5 days away.");
+            }
 
-            return NoContent();
+
         }
 
         [HttpDelete("{id:length(24)}")]
@@ -82,10 +92,10 @@ namespace TravelWebService.Controllers
             return NoContent();
         }
 
-        [HttpGet("/getUpcoming")]
-        public List<Reservations> getUpcommingRservations()
+        [HttpGet("getUpcoming/{id}")]
+        public List<Reservations> getUpcommingRservations(string id)
         {
-            var reservations = _usersService.GetAsync().Result.ToList();
+            var reservations = _usersService.GetByCreatedUser(id).Result.ToList();
 
             DateTime date = DateTime.Today;
             
@@ -102,10 +112,10 @@ namespace TravelWebService.Controllers
 
             return sortedlist;
         }
-        [HttpGet("/getHistory")]
-        public List<Reservations> getHistoryRservations()
+        [HttpGet("getHistory/{id}")]
+        public List<Reservations> getHistoryRservations(string id)
         {
-            var reservations = _usersService.GetAsync().Result.ToList();
+            var reservations = _usersService.GetByCreatedUser(id).Result.ToList();
 
             DateTime date = DateTime.Now;
 
@@ -113,6 +123,26 @@ namespace TravelWebService.Controllers
             reservations.ForEach(reservation => {
                 DateTime date1 = DateTime.ParseExact(reservation.Date, "dd/MM/yyyy", CultureInfo.InvariantCulture);
                 if (date > date1)
+                {
+                    sortedlist.Add(reservation);
+                }
+            });
+
+
+            return sortedlist;
+        }
+
+        [HttpGet("getUpcoming/schedule/{id}")]
+        public List<Reservations> getUpcommingRservationsBySchedule(string id)
+        {
+            var reservations = _usersService.GetBySchedule(id).Result.ToList();
+
+            DateTime date = DateTime.Today;
+
+            List<Reservations> sortedlist = new List<Reservations>();
+            reservations.ForEach(reservation => {
+                DateTime date1 = DateTime.ParseExact(reservation.Date, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                if (date < date1)
                 {
                     sortedlist.Add(reservation);
                 }
