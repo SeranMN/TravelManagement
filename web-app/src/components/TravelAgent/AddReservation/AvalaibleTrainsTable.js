@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { Box, Button, IconButton, Grid, Typography } from "@mui/material";
-import EditIcon from '@mui/icons-material/Edit';
+import React, { useState } from "react";
+import { useNavigate } from 'react-router-dom';
+import { IconButton} from "@mui/material";
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -12,31 +12,9 @@ import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import CloseIcon from '@mui/icons-material/Close';
+import BookIcon from '@mui/icons-material/Book';
 import { Chip } from '@mui/material';
-import axios from 'axios';
-
-export const ShowTrainName = ({trainId}) => {
-    const [trainName, setTrainName] = useState()
-
-    useEffect(() => {
-        console.log("trainId", trainId)
-        const getTrain = async () => {
-            await axios.get(`http://localhost:5000/api/train/${trainId && trainId}`)
-            .then((res) => { 
-              setTrainName(res.data.name) 
-              console.log('res.data',res.data)
-            })
-            .catch((err) => console.log(err))
-        }
-        getTrain()
-    }, [])
-
-    return (
-        <>
-            {trainName}
-        </>
-    )
-}
+import { ShowTrainName } from "../../BackOffice/Schedule Management/ScheduleTable";
 
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -74,24 +52,11 @@ const BootstrapDialogTitle = (props) => {
 };
 
 
-const ScheduleTable = ({handleClickOpen, setEdit, setData, toggle }) => {
+const AvalaibleTrainsTable = ({ searchResults }) => {
 
-    const [schedule, setSchedule] = useState()
-    const [viewStations, setViewStations] = React.useState(false);
-    const [stations, setStations] = React.useState(false);
-
-    useEffect(() => {
-        const getTrains = async () => {
-            axios.get('http://localhost:5000/api/schedule')
-            .then((res) => { 
-              setSchedule(res.data) 
-              console.log('res.data',res.data)
-            })
-            .catch((err) => console.log(err))
-        }
-        getTrains()
-   
-    }, [toggle])
+    const navigate = useNavigate();
+    const [viewStations, setViewStations] = useState(false);
+    const [stations, setStations] = useState(false);
 
     const handleViewStations = (data) => {
         setViewStations(true);
@@ -102,27 +67,12 @@ const ScheduleTable = ({handleClickOpen, setEdit, setData, toggle }) => {
         setViewStations(false);
     };
 
-    const handleEdit = (rowData) => {
-        handleClickOpen();
-        setEdit(true)
-        setData(rowData)
-    }
+    const handleBook = (id) => {
+        navigate(`/viewTrain/${id}`)
+    };
 
     return (
-        <Box>
-            <Grid container sx={{ mb: 4 }}>
-                <Grid item xs={12} md={10} lg={10}>
-                    <Typography sx={{
-                        fontSize: "22px",
-                        fontWeight: "600",
-                        mt: 3,
-                        textAlign: 'center'
-                    }}>
-                        Listed Schedule
-                    </Typography>
-                </Grid>
-            </Grid>
-
+        <>
             <BootstrapDialog
                 onClose={handleCloseStations}
                 aria-labelledby="customized-dialog-title"
@@ -137,14 +87,13 @@ const ScheduleTable = ({handleClickOpen, setEdit, setData, toggle }) => {
                             <Chip
                                 key={station}
                                 label={station}
-                                sx={{ml: 2, mt: 0.8}}
+                                sx={{ ml: 2, mt: 0.8 }}
                             />
                         </>
                     ))}
                 </DialogContent>
 
             </BootstrapDialog>
-
             <Table>
                 <TableHead>
                     <TableRow>
@@ -164,29 +113,27 @@ const ScheduleTable = ({handleClickOpen, setEdit, setData, toggle }) => {
                             Depature Time
                         </TableCell>
                         <TableCell align="center" sx={{ color: "#1A2857", fontWeight: "600", fontFamily: 'Proxima-Nova', fontSize: 15 }}>
-                            View Intermediate Stations
+                             Intermediate Stations
                         </TableCell>
                         <TableCell align="center" sx={{ color: "#1A2857", fontWeight: "600", fontFamily: 'Proxima-Nova', fontSize: 15 }}>
-                            Edit
+                            Book
                         </TableCell>
-                        <TableCell align="center" sx={{ color: "#1A2857", fontWeight: "600", fontFamily: 'Proxima-Nova', fontSize: 15 }}>
-                            Schedule Status
-                        </TableCell>
+                        
                     </TableRow>
                 </TableHead>
 
                 <TableBody>
-                    {schedule && schedule.map((row) => (
+                    {searchResults && searchResults.map((row) => (
                         <TableRow
                             key={row.id}
                             sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                         >
-                             <TableCell
+                            <TableCell
                                 component="th"
                                 scope="row"
                                 align="center"
                             >
-                                <ShowTrainName trainId ={row.trainId}/>
+                                <ShowTrainName trainId={row.trainId} />
                             </TableCell>
                             <TableCell
                                 component="th"
@@ -207,27 +154,21 @@ const ScheduleTable = ({handleClickOpen, setEdit, setData, toggle }) => {
                                     <RemoveRedEyeIcon />
                                 </IconButton>
                             </TableCell>
-                            <TableCell align="center" sx={{ fontWeight: "500", fontFamily: "Proxima-Nova" }}>
+                            <TableCell align="center">
                                 <IconButton
-                                    aria-label="delete"
+                                    aria-label="book"
                                     size="medium"
-                                    color="primary"
-                                    onClick={() => handleEdit(row)}
+                                    onClick={() => handleBook(row.id)}
                                 >
-                                    <EditIcon />
+                                    <BookIcon />
                                 </IconButton>
                             </TableCell>
-                            <TableCell align="center" sx={{fontWeight: "500", color: row.status === true ? "green" : "red"}} >
-                                {row.status === true ? "Published" : "Not Published"}
-
-                            </TableCell>
-
                         </TableRow>
                     ))}
                 </TableBody>
             </Table>
-        </Box>
+        </>
     )
 }
 
-export default ScheduleTable
+export default AvalaibleTrainsTable

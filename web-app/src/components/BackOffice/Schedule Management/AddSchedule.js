@@ -6,11 +6,9 @@ import { styled } from '@mui/material/styles';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import { Chip } from '@mui/material';
-import Typography from '@mui/material/Typography';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import FormLabel from '@mui/material/FormLabel';
@@ -19,11 +17,9 @@ import InputLabel from '@mui/material/InputLabel';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import CancelIcon from "@mui/icons-material/Cancel";
-import CheckIcon from "@mui/icons-material/Check";
-import TextareaAutosize from '@mui/material/TextareaAutosize';
 import axios from 'axios'
 import MenuItem from '@mui/material/MenuItem';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Select from '@mui/material/Select';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
@@ -200,9 +196,15 @@ const AddSchedule = ({ open, handleClickOpen, handleClose, edit, setEdit, data, 
                                     setToggle(!toggle)
                                     handleClose()
                                 }).catch((err) => {
-                                    setMsg("oops! Somthing Went Wrong")
-                                    SetSeverity("error");
-                                    handleClick()
+                                    if (err.response && err.response.status === 400) {
+                                        setMsg(err.response.data);
+                                        SetSeverity("error");
+                                        handleClick();
+                                    } else {
+                                        setMsg("oops! Somthing Went Wrong");
+                                        SetSeverity("error");
+                                        handleClick();
+                                    }
                                 })
                         }
                         else {
