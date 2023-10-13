@@ -1,16 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { Box, Button, IconButton, Grid, Typography } from "@mui/material";
+import { Box, IconButton, Grid, Typography } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from '@mui/icons-material/Edit';
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
 import { styled } from '@mui/material/styles';
 import CloseIcon from '@mui/icons-material/Close';
 import PropTypes from 'prop-types';
@@ -176,12 +174,6 @@ const Account = () => {
               Contact No
             </TableCell>
             <TableCell align="center" sx={{ color: "#1A2857", fontWeight: "600", fontFamily: 'Proxima-Nova', fontSize: 15 }}>
-              Gender
-            </TableCell>
-            <TableCell align="center" sx={{ color: "#1A2857", fontWeight: "600", fontFamily: 'Proxima-Nova', fontSize: 15 }}>
-              Address
-            </TableCell>
-            <TableCell align="center" sx={{ color: "#1A2857", fontWeight: "600", fontFamily: 'Proxima-Nova', fontSize: 15 }}>
               Edit
             </TableCell>
             <TableCell align="center" sx={{ color: "#1A2857", fontWeight: "600", fontFamily: 'Proxima-Nova', fontSize: 15 }}>
@@ -225,16 +217,6 @@ const Account = () => {
               </TableCell>
               <TableCell align="center">
                 {row.phoneNumber}
-              </TableCell>
-              <TableCell
-                align="center"
-              >
-                {row.gender}
-              </TableCell>
-              <TableCell
-                align="center"
-              >
-                {row.address}
               </TableCell>
               <TableCell align="center" sx={{ fontWeight: "500", fontFamily: "Proxima-Nova" }}>
                 <IconButton

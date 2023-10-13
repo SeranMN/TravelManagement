@@ -135,7 +135,7 @@ const Login = () => {
                         <Typography variant="body2" color="text.secondary" align="center" marginTop={5}>
                             {'Copyright © '}
                             <Link color="inherit" >
-                                Nilwala Leos
+                                RailReady
                             </Link>{' '}
                             {new Date().getFullYear()}
                             {'.'}

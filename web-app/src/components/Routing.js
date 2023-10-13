@@ -11,6 +11,9 @@ import Header from './TravelAgent/Header';
 import TravelAgenHome from './TravelAgent/TravelAgenHome';
 import Reservation from './TravelAgent/AddReservation/Reservation';
 import Bookings from './TravelAgent/ViewBookings/Bookings';
+import AddReservation from './TravelAgent/AddReservation/AddReservation';
+import ViewHistory from './TravelAgent/History/ViewHistory';
+import Profile from './TravelAgent/Profile/ViewProfile';
 
 const Routing = () => {
     return (
@@ -25,6 +28,9 @@ const Routing = () => {
                     <Route path='/tavelAgentHome' exact element={<TravelAgenHome />} />
                     <Route path='/addreservation' exact element={<Reservation />} />
                     <Route path='/viewBookings' exact element={<Bookings />} />
+                    <Route path='/viewTrain/:id' exact element={<AddReservation />} />
+                    <Route path='/history' exact element={<ViewHistory />} />
+                    <Route path='/profile' exact element={<Profile />} />
                 </Route>
             </Routes>
         </BrowserRouter>
