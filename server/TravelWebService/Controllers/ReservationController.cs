@@ -14,10 +14,13 @@ namespace TravelWebService.Controllers
         public ReservationController(ReservationServices reservationServices) =>
             _usersService = reservationServices;
 
+        //Get All Reservations
+
         [HttpGet]
         public async Task<List<Reservations>> Get() =>
             await _usersService.GetAsync();
 
+        //Get Specific Reservation
         [HttpGet("{id:length(24)}")]
         public async Task<ActionResult<Reservations>> Get(string id)
         {
@@ -31,6 +34,7 @@ namespace TravelWebService.Controllers
             return book;
         }
 
+        //Create Reservation
         [HttpPost]
         public async Task<IActionResult> Post(Reservations newReservation)
         {
@@ -38,6 +42,8 @@ namespace TravelWebService.Controllers
 
             return CreatedAtAction(nameof(Get), new { id = newReservation.Id }, newReservation);
         }
+
+        //Update Reservation
 
         [HttpPut("{id:length(24)}")]
         public async Task<IActionResult> Update(string id, Reservations updatedReservation)
@@ -66,6 +72,7 @@ namespace TravelWebService.Controllers
 
         }
 
+        //Delete Reservation
         [HttpDelete("{id:length(24)}")]
         public async Task<IActionResult> Delete(string id)
         {
@@ -91,7 +98,7 @@ namespace TravelWebService.Controllers
 
             return NoContent();
         }
-
+        //Get Upcoming Reservation
         [HttpGet("getUpcoming/{id}")]
         public List<Reservations> getUpcommingRservations(string id)
         {
@@ -112,6 +119,7 @@ namespace TravelWebService.Controllers
 
             return sortedlist;
         }
+        //Get History of Reservations
         [HttpGet("getHistory/{id}")]
         public List<Reservations> getHistoryRservations(string id)
         {

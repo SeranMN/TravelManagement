@@ -1,14 +1,195 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ReservationUpdateFragment">
+    android:background="@drawable/trainbg"
+    tools:context=".MainActivity">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:background="@color/my_primary"
+        android:alpha="0.7"/>
 
-</FrameLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="362dp"
+        android:layout_above="@id/card_view"
+        android:layout_marginBottom="-22dp"
+        android:orientation="vertical"
+        android:padding="28dp">
+
+        <ImageView
+            android:layout_width="62dp"
+            android:layout_height="49dp"
+            android:src="@drawable/baseline_train_24_white" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-medium"
+            android:paddingBottom="24dp"
+            android:text="Update Reservation"
+            android:textColor="@color/white"
+            android:textSize="32sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView18"
+                android:layout_width="115dp"
+                android:layout_height="49dp"
+                android:layout_weight="1"
+                android:text="From"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <Spinner
+                android:id="@+id/spinner_from"
+                android:layout_width="190dp"
+                android:layout_height="60dp"
+                android:layout_weight="1"
+                android:entries="@array/Town_array"
+                android:paddingStart="24dp"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView20"
+                android:layout_width="280dp"
+                android:layout_height="38dp"
+                android:layout_weight="1"
+                android:text="To"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <Spinner
+                android:id="@+id/spinner_to"
+                android:layout_width="match_parent"
+                android:layout_height="63dp"
+                android:layout_weight="1"
+                android:entries="@array/Town_array"
+                android:paddingStart="24dp" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/button_findTrain"
+            android:layout_width="match_parent"
+            android:layout_height="63dp"
+            android:backgroundTint="@color/teal_700"
+            android:text="Find" />
+
+
+    </LinearLayout>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_view"
+        android:layout_width="match_parent"
+        android:layout_height="511dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="-20dp"
+        app:cardCornerRadius="28dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="454dp"
+            android:orientation="vertical"
+            android:padding="28dp">
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="138dp">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/schedule_re_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </ScrollView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="51dp"
+                android:orientation="horizontal"
+                android:paddingTop="16dp">
+
+                <TextView
+                    android:id="@+id/textView11"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Date"
+                    android:textAlignment="center"
+                    android:textColor="#5917e1"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/textView_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Enter Date"
+                    android:textAlignment="center"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="84dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView17"
+                    android:layout_width="306dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Passenger Count"
+                    android:textColor="#5917e1"
+                    android:textSize="18sp" />
+
+                <Spinner
+                    android:id="@+id/spinner_count"
+                    android:layout_width="228dp"
+                    android:layout_height="61dp"
+                    android:layout_weight="1"
+                    android:entries="@array/Count_array" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/button_done"
+                android:layout_width="354dp"
+                android:layout_height="76dp"
+                android:text="Done" />
+
+        </LinearLayout>
+
+
+    </androidx.cardview.widget.CardView>
+
+
+</RelativeLayout>
+
+
+
+
+
+
+
+
+
+
+

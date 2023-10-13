@@ -20,6 +20,9 @@ namespace TravelWebService.Model
         [BsonElement("Role")]
         public string Role { get; set; } = string.Empty;
 
+        [BsonElement("Password")]
+        public string Password { get; set; } = "";
+
         [BsonElement("Status")]
         public bool Status { get; set; } = false;
     }

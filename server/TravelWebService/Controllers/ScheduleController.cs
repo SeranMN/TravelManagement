@@ -17,11 +17,12 @@ namespace TravelWebService.Controllers
             _sheduleService = scheduleService;
             _reservatinService = reservatinService;
         }
-
+        //Get All Schedules
         [HttpGet]
         public async Task<List<Shedule>> Get() =>
             await _sheduleService.GetAsync();
 
+        //Get Schedule By id
         [HttpGet("{id:length(24)}")]
         public async Task<ActionResult<Shedule>> Get(string id)
         {
@@ -35,14 +36,15 @@ namespace TravelWebService.Controllers
             return shedule;
         }
 
+        //Create Schedule
         [HttpPost]
         public async Task<IActionResult> Post(Shedule Schedule)
         {
             await _sheduleService.CreateAsync(Schedule);
 
-            return CreatedAtAction(nameof(Get), new { id = Schedule.Id }, Schedule);
+            return CreatedAtAction(nameof(Get), Schedule);
         }
-
+        //Update Calss
         [HttpPut("{id:length(24)}")]
         public async Task<IActionResult> Update(string id, Shedule updatedSchedule)
         {
@@ -78,6 +80,7 @@ namespace TravelWebService.Controllers
             return Ok("Schedule has been successfully Edited.");
         }
 
+        //Delete Class
         [HttpDelete("{id:length(24)}")]
         public async Task<IActionResult> Delete(string id)
         {
@@ -92,7 +95,7 @@ namespace TravelWebService.Controllers
 
             return NoContent();
         }
-
+        //Find shedules by Frm And To
         [HttpGet("tour")]
         public async Task<List<Shedule>> GetByTour(string from, string to)
         {
