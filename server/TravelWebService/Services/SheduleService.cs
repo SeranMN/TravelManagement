@@ -41,7 +41,8 @@ namespace TravelWebService.Services
 
         public async Task<List<Shedule>> FindSchedules(string from, string to)
         {
-            return await _sheduleCollection.Find(filter: x => x.Start == from & x.End == to).ToListAsync();
+            return await _sheduleCollection.Find(filter: x => (x.Start == from || x.Intermediate.Contains(from))
+            && (x.End == to || x.Intermediate.Contains(to)) && x.Status == true).ToListAsync();
         }
     }
 }

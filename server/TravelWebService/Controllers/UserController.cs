@@ -19,7 +19,7 @@ namespace TravelWebService.Controller
         public async Task<List<User>> Get() =>
             await _usersService.GetAsync();
 
-        [HttpGet("{id:length(24)}")]
+        [HttpGet("{id}")]
         public async Task<ActionResult<User>> Get(string id)
         {
             var book = await _usersService.GetAsync(id);

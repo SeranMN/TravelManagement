@@ -10,10 +10,12 @@ namespace TravelWebService.Controllers
     public class ScheduleController: ControllerBase
     {
         private readonly ScheduleService _sheduleService;
+        private readonly ReservationServices _reservatinService;
 
-        public ScheduleController(ScheduleService scheduleService)
+        public ScheduleController(ScheduleService scheduleService, ReservationServices reservatinService)
         {
             _sheduleService = scheduleService;
+            _reservatinService = reservatinService;
         }
 
         [HttpGet]
@@ -44,18 +46,36 @@ namespace TravelWebService.Controllers
         [HttpPut("{id:length(24)}")]
         public async Task<IActionResult> Update(string id, Shedule updatedSchedule)
         {
-            var book = await _sheduleService.GetAsync(id);
+            var schedule = await _sheduleService.GetAsync(id);
 
-            if (book is null)
+            if (schedule is null)
             {
                 return NotFound();
             }
 
-            updatedSchedule.Id = book.Id;
+            updatedSchedule.Id = schedule.Id;
 
-            await _sheduleService.UpdateAsync(id, updatedSchedule);
+            if(schedule.Status != updatedSchedule.Status)
+            {
+               var reservation = _reservatinService.GetBySchedule(updatedSchedule.Id);
 
-            return NoContent();
+                if (reservation != null)
+                {
+                    return BadRequest("There are existing reservations associated with this schedule ");
+                }
+                else
+                {
+                    await _sheduleService.UpdateAsync(id, updatedSchedule);
+
+                }
+            }
+            else
+            {
+                await _sheduleService.UpdateAsync(id, updatedSchedule);
+            }
+
+
+            return Ok("Schedule has been successfully Edited.");
         }
 
         [HttpDelete("{id:length(24)}")]
@@ -73,7 +93,7 @@ namespace TravelWebService.Controllers
             return NoContent();
         }
 
-        [HttpGet("/tour")]
+        [HttpGet("tour")]
         public async Task<List<Shedule>> GetByTour(string from, string to)
         {
             var schedule = await _sheduleService.FindSchedules(from, to);
