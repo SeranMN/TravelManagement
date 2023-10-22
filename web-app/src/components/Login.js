@@ -25,28 +25,32 @@ const Login = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        navigate('/adminHome')
 
-        // axios.post(`http://localhost:5000/login/${email}`, { password: password })
-        //     .then((data) => {
-        //         console.log(data);
-        //         if (data.data == 'Invalid') {
-        //             alert('Wrong')
-        //         } else {
-        //             sessionStorage.setItem('role', data.data.role)
-        //             sessionStorage.setItem('mail', data.data.email)
-        //             if (data.data.role) {
-        //                 navigate('/adminDashboard');
-        //             } else {
-        //                 navigate('/')
-        //             }
+        axios.get(`http://localhost:5000/api/user/${userName}?password=${password}`,)
+            .then((data) => {
+                console.log(data);
+                if (data.status == 200) {
+                    sessionStorage.setItem('role', data.data.role)
+                    sessionStorage.setItem('id', data.data.id)
+                    sessionStorage.setItem('name', data.data.name)
+                    sessionStorage.setItem('phoneNumber', data.data.phoneNumber)
+                    sessionStorage.setItem('status', data.data.status)
+                    sessionStorage.setItem('email', data.data.email)
 
+                    if(data.data.role === "Travel Agent") {
+                        navigate('/travelAgentHome')
+                    }
+                    else if(data.data.role === "Admin") {
+                        navigate('/adminHome')
+                    }
+                } else {
+                    alert("wrong Credentials")
+                }
 
-        //         }
-
-        //     }).catch((err) => {
-        //         console.log(err)
-        //     })
+            }).catch((err) => {
+                console.log(err)
+                alert("wrong Credentials")
+            })
     }
 
     return (
@@ -104,7 +108,7 @@ const Login = () => {
                                 type="password"
                                 id="password"
                                 onChange={(e) => setPassword(e.target.value)}
-                                valur={password}
+                                value={password}
                                 autoComplete="current-password"
                             />
                             <FormControlLabel

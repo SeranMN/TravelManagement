@@ -76,7 +76,7 @@ function DashboardContent() {
         setOpen(!open);
     };
 
-    const [header, setHeader] = useState("Dashboard");    
+    const [header, setHeader] = useState("Train Management");    
 
     const view = useSelector(state => state.container.view)
 
@@ -91,7 +91,11 @@ function DashboardContent() {
 
     const logout = () => {
         sessionStorage.removeItem('role')
-        sessionStorage.removeItem('mail')
+        sessionStorage.removeItem('id')
+        sessionStorage.removeItem('name')
+        sessionStorage.removeItem('phoneNumber') 
+        sessionStorage.removeItem('email')
+        sessionStorage.removeItem('status')
         navigate('/')
     }
 

@@ -2,12 +2,12 @@ import { React, useState, forwardRef } from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import { Button, Card, CardContent, Typography } from "@mui/material";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import axios from "axios";
 import MuiAlert from "@mui/material/Alert";
 import Snackbar from "@mui/material/Snackbar"
 import Logo from '../train.jpg'
+
+import { useNavigate } from "react-router-dom";
 
 const Registration = () => {
 
@@ -19,7 +19,7 @@ const Registration = () => {
     const [confirmPwd, setConfirmPwd] = useState();
     const vertical = 'bottom'
     const horizontal = 'right'
-
+    const navigate = useNavigate()
 
     const Alert = forwardRef(function Alert(props, ref) {
         return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -44,6 +44,7 @@ const Registration = () => {
             email: email,
             phoneNumber: phone,
             role: "Travel Agent",
+            password: pwd,
             status: true
         }
 
@@ -52,6 +53,9 @@ const Registration = () => {
                 setMsg("Successfully Added user");
                 SetSeverity("success");
                 setOpenSnack(true);
+                setTimeout(() => {
+                    navigate("/")
+                }, 1000)
             }).catch((err) => {
                 if (err.response && err.response.status === 400) {
                     setMsg(err.response.data);
@@ -148,7 +152,7 @@ const Registration = () => {
                             sx={{ width: 600 }}
                             value={pwd}
                             onChange={(e) => {
-                                setPwd(e)
+                                setPwd(e.target.value)
                             }}
                         />
                     </CardContent>
@@ -162,17 +166,11 @@ const Registration = () => {
                             sx={{ width: 600 }}
                             value={confirmPwd}
                             onChange={(e) => {
-                                setConfirmPwd(e)
+                                setConfirmPwd(e.target.value)
                             }}
                         />
                     </CardContent>
 
-                    <CardContent>
-                        <FormControlLabel
-                            control={<Checkbox />}
-                            label="Agree to Terms and Conditions"
-                        />
-                    </CardContent>
                     <CardContent>
                         <Button onClick={onSubmit} variant="contained" sx={{ width: "100%", height: 40 }}>
                             Submit
