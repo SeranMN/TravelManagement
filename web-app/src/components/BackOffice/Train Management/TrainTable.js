@@ -9,9 +9,21 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import axios from 'axios'
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+import DeleteTrainModel from "./DeleteTrainModel";
 
-const TrainTable = ({handleClickOpen, setEdit, setData, toggle }) => {
+const Alert = React.forwardRef(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
+const TrainTable = ({handleClickOpen, setEdit, setData, toggle, setToggle }) => {
     const [trains, setTrains] = useState()
+    const [deleteModel, setDeleteModel] = useState(false);
+    const [deleteId, setDeleteId] = useState()
+    const [open1, setOpen1] = useState(false);
+    const [severity, SetSeverity] = useState("");
+    const [msg, setMsg] = useState("");
 
     useEffect(() => {
         const getTrains = async () => {
@@ -26,10 +38,32 @@ const TrainTable = ({handleClickOpen, setEdit, setData, toggle }) => {
    
     }, [toggle])
 
+    const handleClose1 = (event, reason) => {
+        if (reason === 'clickaway') {
+          return;
+        }
+    
+        setOpen1(false);
+      };
+    
+      const handleClick = () => {
+        setOpen1(true);
+      };
+    
+
     const handleEdit = (rowData) => {
         handleClickOpen();
         setEdit(true)
         setData(rowData)
+    }
+
+    const handleDelete = (rowID) => {
+        setDeleteModel(true)
+        setDeleteId(rowID)
+    }
+
+    const handleCloseDelete = () => {
+        setDeleteModel(false)
     }
 
     return (
@@ -46,6 +80,20 @@ const TrainTable = ({handleClickOpen, setEdit, setData, toggle }) => {
                     </Typography>
                 </Grid>
             </Grid>
+            <Snackbar open={open1} autoHideDuration={3000} onClose={handleClose1} anchorOrigin={{
+                vertical: "top",
+                horizontal: "center"
+            }}>
+
+                <Alert onClose={handleClose1} severity={severity} sx={{ width: '100%' }}>
+                    {msg}
+                </Alert>
+            </Snackbar>
+
+            {deleteModel &&
+                <DeleteTrainModel handleCloseDelete={handleCloseDelete} deleteModel={deleteModel} trainId={deleteId}
+                    setToggle={setToggle} toggle={toggle} SetSeverity={SetSeverity} setMsg={setMsg} handleClick={handleClick} />
+            }
 
             <Table>
                 <TableHead>
@@ -58,6 +106,9 @@ const TrainTable = ({handleClickOpen, setEdit, setData, toggle }) => {
                         </TableCell>
                         <TableCell align="center" sx={{ color: "#1A2857", fontWeight: "600", fontFamily: 'Proxima-Nova', fontSize: 15 }}>
                             Edit
+                        </TableCell>
+                        <TableCell align="center" sx={{ color: "#1A2857", fontWeight: "600", fontFamily: 'Proxima-Nova', fontSize: 15 }}>
+                            Delete
                         </TableCell>
                         <TableCell align="center" sx={{ color: "#1A2857", fontWeight: "600", fontFamily: 'Proxima-Nova', fontSize: 15 }}>
                             Status
@@ -87,6 +138,16 @@ const TrainTable = ({handleClickOpen, setEdit, setData, toggle }) => {
                                     onClick={() => handleEdit(row)}
                                 >
                                     <EditIcon />
+                                </IconButton>
+                            </TableCell>
+                            <TableCell align="center" sx={{ fontWeight: "500", fontFamily: "Proxima-Nova" }}>
+                                <IconButton
+                                    aria-label="delete"
+                                    size="large"
+                                    color="error"
+                                    onClick={() => handleDelete(row.id)}
+                                >
+                                    <DeleteIcon />
                                 </IconButton>
                             </TableCell>
                             <TableCell align="center" sx={{fontWeight: "500", color: row.status === true ? "green" : "red"}} >

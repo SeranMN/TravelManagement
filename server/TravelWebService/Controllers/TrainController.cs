@@ -9,10 +9,16 @@ namespace TravelWebService.Controllers
     public class TrainController: ControllerBase
     {
         private readonly TrainService _TrainService;
+        private readonly ScheduleService _ScheduleService;
+        private readonly ReservationServices _ReservationServices;
 
-        public TrainController(TrainService TrainService) =>
-
+        public TrainController(TrainService TrainService, ScheduleService scheduleService, ReservationServices reservationServices)
+        {
             _TrainService = TrainService;
+            _ScheduleService = scheduleService;
+            _ReservationServices = reservationServices;
+        }
+
         //Get All Trains
         [HttpGet]
         public async Task<List<train>> Get() =>
@@ -56,20 +62,32 @@ namespace TravelWebService.Controllers
 
             return NoContent();
         }
+
         //Delete Train
         [HttpDelete("{id:length(24)}")]
         public async Task<IActionResult> Delete(string id)
         {
-            var book = await _TrainService.GetAsync(id);
+            var train = await _TrainService.GetAsync(id);
 
-            if (book is null)
+            if (train is null)
             {
                 return NotFound();
             }
 
+            var trainSchedules = await _ScheduleService.FindSchedulesByTrain(id);
+
+            foreach (var trainSchedule in trainSchedules)
+            {
+                var reservation = await _ReservationServices.GetBySchedule(trainSchedule.Id);
+                if (reservation.Count > 0)
+                {
+                    return BadRequest("There is an existing reservation for this train schedule.");
+                }
+            }
+
             await _TrainService.RemoveAsync(id);
 
-            return NoContent();
+            return Ok();
         }
 
     }

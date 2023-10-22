@@ -19,7 +19,6 @@ export const ShowTrainName = ({trainId}) => {
     const [trainName, setTrainName] = useState()
 
     useEffect(() => {
-        console.log("trainId", trainId)
         const getTrain = async () => {
             await axios.get(`http://localhost:5000/api/train/${trainId && trainId}`)
             .then((res) => { 
