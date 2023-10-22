@@ -14,12 +14,14 @@ import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import { useNavigate } from 'react-router-dom';
 import { Outlet } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 const pages = ['Home', 'Add Reservation', 'View Bookings'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+const settings = ['Profile', 'Logout'];
 
 function Header() {
     const navigate = useNavigate()
+    const location = useLocation();
 
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -38,6 +40,13 @@ function Header() {
     const handleCloseUserMenu = () => {
         setAnchorElUser(null);
     };
+
+    const handleSettingClick = (setting) => {
+        if(setting == "Profile") {
+            navigate('/profile')
+            handleCloseUserMenu()
+        }
+    }
 
     return (
         <>
@@ -123,21 +132,27 @@ function Header() {
                         <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, px: 15 }}>
                             <Button
                                 onClick={() => navigate('/tavelAgentHome')}
-                                sx={{ my: 2, mx: 1, color: 'white', display: 'block' }}
+                                sx={{ my: 2, mx: 1,  display: 'block', color: location.pathname === '/tavelAgentHome' ? 'gold' : 'white', }}
                             >
                                 Home
                             </Button>
                             <Button
                                 onClick={() => navigate('/addreservation')}
-                                sx={{ my: 2, mx: 1, color: 'white', display: 'block' }}
+                                sx={{ my: 2, mx: 1, color: 'white', display: 'block', color: location.pathname === '/addreservation' ? 'gold' : 'white' }}
                             >
                                 Add Reservation
                             </Button>
                             <Button
                                 onClick={() => navigate('/viewBookings')}
-                                sx={{ my: 2, mx: 1, color: 'white', display: 'block' }}
+                                sx={{ my: 2, mx: 1, color: 'white', display: 'block', color: location.pathname === '/viewBookings' ? 'gold' : 'white' }}
                             >
-                                View Bookings
+                                UpComming Travels
+                            </Button>
+                            <Button
+                                onClick={() => navigate('/history')}
+                                sx={{ my: 2, mx: 1, color: 'white', display: 'block', color: location.pathname === '/history' ? 'gold' : 'white' }}
+                            >
+                                History
                             </Button>
                         </Box>
 
@@ -164,7 +179,7 @@ function Header() {
                                 onClose={handleCloseUserMenu}
                             >
                                 {settings.map((setting) => (
-                                    <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                                    <MenuItem key={setting} onClick={() => handleSettingClick(setting)}>
                                         <Typography textAlign="center">{setting}</Typography>
                                     </MenuItem>
                                 ))}

@@ -1,7 +1,4 @@
-import React, { useEffect, useState } from 'react'
-import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
-import axios from 'axios';
+import React from 'react'
 import { Box } from '@mui/material';
 import AddTrain from './AddTrain';
 import TrainTable from './TrainTable';

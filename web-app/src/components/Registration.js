@@ -4,9 +4,6 @@ import TextField from "@mui/material/TextField";
 import { Button, Card, CardContent, Typography } from "@mui/material";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
-import Radio from "@mui/material/Radio";
-import RadioGroup from "@mui/material/RadioGroup";
-import FormLabel from "@mui/material/FormLabel";
 import axios from "axios";
 import MuiAlert from "@mui/material/Alert";
 import Snackbar from "@mui/material/Snackbar"
@@ -16,10 +13,8 @@ const Registration = () => {
 
     const [name, setName] = useState('');
     const [NIC, setNIC] = useState();
-    const [gender, setGender] = useState();
     const [email, setEmail] = useState();
     const [phone, setPhone] = useState();
-    const [address, setAddress] = useState();
     const [pwd, setPwd] = useState();
     const [confirmPwd, setConfirmPwd] = useState();
     const vertical = 'bottom'
@@ -48,8 +43,6 @@ const Registration = () => {
             name: name,
             email: email,
             phoneNumber: phone,
-            gender: gender,
-            address: address,
             role: "Travel Agent",
             status: true
         }
@@ -121,29 +114,6 @@ const Registration = () => {
                     </CardContent>
 
                     <CardContent>
-                        <RadioGroup
-                            row
-                            aria-labelledby="demo-row-radio-buttons-group-label"
-                            name="row-radio-buttons-group"
-                        >
-                            <div style={{ marginLeft: '5px' }}>
-                                <FormLabel>Gender: </FormLabel>
-                                <FormControlLabel
-                                    sx={{ ml: 1 }}
-                                    value="female"
-                                    control={<Radio onChange={(e) => {
-                                        setGender('female')
-                                    }} />}
-                                    label="Female"
-                                />
-                                <FormControlLabel value="male" control={<Radio onChange={(e) => {
-                                    setGender('male')
-                                }} />} label="Male" />
-                            </div>
-                        </RadioGroup>
-                    </CardContent>
-
-                    <CardContent>
                         <TextField
                             id="filled-basic"
                             label="Email"
@@ -165,19 +135,6 @@ const Registration = () => {
                             value={phone}
                             onChange={(e) => {
                                 setPhone(e.target.value)
-                            }}
-                        />
-                    </CardContent>
-
-                    <CardContent>
-                        <TextField
-                            id="filled-basic"
-                            label="Address"
-                            variant="filled"
-                            sx={{ width: 600 }}
-                            value={address}
-                            onChange={(e) => {
-                                setAddress(e.target.value)
                             }}
                         />
                     </CardContent>

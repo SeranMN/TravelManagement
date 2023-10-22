@@ -14,7 +14,7 @@ const MainListItems = ({ setHeader }) => {
 
     return (
         <>
-            <ListItemButton onClick={() => {
+            {/* <ListItemButton onClick={() => {
                 setHeader("Dashboard")
                 dispatch(setView('AdminHome'))
             }}>
@@ -22,7 +22,7 @@ const MainListItems = ({ setHeader }) => {
                     <DashboardIcon />
                 </ListItemIcon>
                 <ListItemText sx={{ml: '-8px'}} primary="Dashboard" />
-            </ListItemButton>
+            </ListItemButton> */}
 
             <ListItemButton onClick={() => {
                 setHeader("Train Management")

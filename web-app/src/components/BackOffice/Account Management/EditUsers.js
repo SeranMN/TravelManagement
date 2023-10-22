@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react'
-import { Box, Button, IconButton, Grid, Typography } from "@mui/material";
+import { Button, IconButton, Grid, Typography } from "@mui/material";
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
@@ -7,13 +7,12 @@ import { styled } from '@mui/material/styles';
 import CloseIcon from '@mui/icons-material/Close';
 import PropTypes from 'prop-types';
 import * as Yup from 'yup';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { Formik, Form, ErrorMessage } from 'formik';
 import FormLabel from '@mui/material/FormLabel';
 import Stack from '@mui/material/Stack';
 import MenuItem from '@mui/material/MenuItem';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
-import TextareaAutosize from '@mui/material/TextareaAutosize';
 import axios from 'axios'
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -72,8 +71,6 @@ const EditUsers = ({open, handleClose, data, toggle, setToggle, setMsg, SetSever
                     email: data && data.email,
                     phoneNumber: data && data.phoneNumber,
                     role: data && data.role,
-                    gender: data && data.gender,
-                    address: data ? data.address : '',
                     status: data && data.status,
                 }}
                 validationSchema={Yup.object({
@@ -88,8 +85,6 @@ const EditUsers = ({open, handleClose, data, toggle, setToggle, setMsg, SetSever
                         name: values.name,
                         email: values.email,
                         phoneNumber: values.phoneNumber,
-                        gender: values.gender,
-                        address: values.address,
                         role: values.role,
                         status: values.status
                     }
@@ -132,33 +127,6 @@ const EditUsers = ({open, handleClose, data, toggle, setToggle, setMsg, SetSever
                             <Stack direction="row" spacing={7} alignItems='center' mt={4}>
                                 <FormLabel sx={{ color: "black", minWidth: '80px' }}>Contact No :</FormLabel>
                                 <TextField name='phoneNumber' onChange={props.handleChange} value={props.values.phoneNumber} style={{ width: 258 }} id="outlined-basic" size="small"  variant="outlined" />
-                            </Stack>
-
-                            <Stack direction="row" spacing={8} alignItems='center' mt={4} mb={3}>
-                                <FormLabel sx={{ color: "black", minWidth: '80px' }}>Gender :</FormLabel>
-                                <Select
-                                    id="demo-simple-select"
-                                    name='gender'
-                                    value={props.values.gender}
-                                    onChange={props.handleChange}
-                                    style={{ width: 258 }}
-                                >
-                                    <MenuItem value={"male"}>Male</MenuItem>
-                                    <MenuItem value={"female"}>Female</MenuItem>
-                                </Select>
-                            </Stack>
-
-                            <Stack direction="row" spacing={8} alignItems='center' mt={4}>
-                                <FormLabel sx={{ color: "black", minWidth: '80px' }}>Address :</FormLabel>
-                                    <TextareaAutosize
-                                        aria-label="minimum height"
-                                        name='address'
-                                        onChange={props.handleChange}
-                                        value={props.values.address}
-                                        minRows={3}
-                                        placeholder="Address"
-                                        style={{ width: 258}}
-                                    />
                             </Stack>
 
                             <Stack direction="row" spacing={8} alignItems='center' mt={4} mb={3}>
