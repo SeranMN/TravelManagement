@@ -67,7 +67,7 @@
                 app:layout_constraintTop_toTopOf="@+id/imgProfile" />
 
             <TextView
-                android:id="@+id/textView_homeName"
+                android:id="@+id/textView_email"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
