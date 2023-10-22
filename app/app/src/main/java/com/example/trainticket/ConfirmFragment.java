@@ -54,7 +54,7 @@ public class ConfirmFragment extends Fragment {
             reservation.setTo(args.getString("ReservationTo"));
             reservation.setId(args.getString("trainId"));
             reservation.setCount(args.getString("count"));
-            reservation.setAravingTime(args.getString("time"));
+            reservation.setArivingTime(args.getString("time"));
         }
 
         TextView start = view.findViewById(R.id.textView_startStation);
@@ -68,7 +68,7 @@ public class ConfirmFragment extends Fragment {
 
         start.setText(reservation.getFrom());
         end.setText(reservation.getTo());
-        time.setText(reservation.getAravingTime());
+        time.setText(reservation.getArivingTime());
         date.setText(reservation.getDate());
 
         confirm.setOnClickListener(new View.OnClickListener() {
@@ -77,7 +77,7 @@ public class ConfirmFragment extends Fragment {
                 SharedPreferences preferences = getActivity().getSharedPreferences("session_data", Context.MODE_PRIVATE);
                 String userId = preferences.getString("id", "");
 
-                Reservation newReservation = new Reservation(userId,"train",reservation.getDate(),reservation.getAravingTime(),reservation.getFrom(),reservation.getTo(),userId,reservation.getCount());
+                Reservation newReservation = new Reservation(userId,"train",reservation.getDate(),reservation.getArivingTime(),reservation.getFrom(),reservation.getTo(),userId,reservation.getCount());
                 Call<Reservation> call = apiService.createReservation(newReservation);
 
                 call.enqueue(new Callback<Reservation>() {

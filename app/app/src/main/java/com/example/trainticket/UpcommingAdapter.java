@@ -69,7 +69,7 @@ public class UpcommingAdapter extends RecyclerView.Adapter<UpcommingAdapter.View
     public void onBindViewHolder(@NonNull UpcommingAdapter.ViewHolder holder, int position) {
         Reservation reservation = upcommingReservations.get(position);
         holder.dateTextView.setText("Date: "+ reservation.getDate());
-        holder.timeTextView.setText("Time: "+reservation.getAravingTime());
+        holder.timeTextView.setText("Time: "+reservation.getArivingTime());
         holder.fromTextView.setText("From: "+reservation.getFrom());
         holder.toTexTView.setText("To: "+reservation.getTo());
         ;

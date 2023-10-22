@@ -35,5 +35,14 @@ namespace TravelWebService.Services
 
         public async Task RemoveAsync(string id) =>
             await _userCollection.DeleteOneAsync(x => x.Id == id);
+
+        public async Task Deactivate(string id)
+        {
+            var filter = Builders<User>.Filter.Eq(x => x.Id, id);
+            var update = Builders<User>.Update.Set(x => x.Status, false);
+
+            await _userCollection.UpdateOneAsync(filter, update);
+        }
+        
     }
 }

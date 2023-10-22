@@ -31,7 +31,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
     public void onBindViewHolder(@NonNull HistoryAdapter.ViewHolder holder, int position) {
         Reservation reservation = pastReservations.get(position);
         holder.dateTextView.setText("Date: "+ reservation.getDate());
-        holder.timeTextView.setText("Time: "+reservation.getAravingTime());
+        holder.timeTextView.setText("Time: "+reservation.getArivingTime());
         holder.fromTextView.setText("From: "+reservation.getFrom());
         holder.toTexTView.setText("To: "+reservation.getTo());
         ;

@@ -95,5 +95,19 @@ namespace TravelWebService.Controller
             return Ok("User has been successfully deleted.");
         }
 
+        [HttpPut("deactivate/{id}")]
+        public async Task <IActionResult> Deactivate(string id)
+        {
+            var user = await _usersService.GetAsync(id);
+
+            if(user is null)
+            {
+                return NotFound();
+            }
+
+            await _usersService.Deactivate(id);
+            return Ok();
+        }
+
     }
 }

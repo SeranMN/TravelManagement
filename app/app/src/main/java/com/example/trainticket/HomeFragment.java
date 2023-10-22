@@ -14,8 +14,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.trainticket.databinding.ActivityMainBinding;
-
 /**
  * A simple {@link Fragment} subclass.
 
@@ -47,7 +45,7 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         SharedPreferences preferences = getActivity().getSharedPreferences("session_data", Context.MODE_PRIVATE);
 
-        TextView name = view.findViewById(R.id.textView_homeName);
+        TextView name = view.findViewById(R.id.textView_email);
         LinearLayout newButton = view.findViewById(R.id.buttton_New);
         LinearLayout histroyButton = view.findViewById(R.id.btn_history);
         LinearLayout upButton = view.findViewById(R.id.btn_up);

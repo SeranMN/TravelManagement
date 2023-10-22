@@ -75,12 +75,12 @@ public class Reservation {
         this.date = date;
     }
 
-    public String getAravingTime() {
+    public String getArivingTime() {
         return arivingTime;
     }
 
-    public void setAravingTime(String aravingTime) {
-        this.arivingTime = aravingTime;
+    public void setArivingTime(String arivingTime) {
+        this.arivingTime = arivingTime;
     }
 
     public String getFrom() {

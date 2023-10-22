@@ -38,4 +38,14 @@ public interface ApiService {
     @GET("api/User/{id}")
     Call <User> Login (@Path("id") String id,@Query("password") String pwd);
 
+    @POST("api/User")
+    Call <User> CreateUser (@Body User user);
+
+    @PUT("api/User/deactivate/{id")
+    Call <User> DeactivateUser (@Path("id")String id);
+
+    @PUT("api/User/{id}")
+    Call <User> UpdateUser (@Path("id") String id,@Body User user );
+
+
 }
