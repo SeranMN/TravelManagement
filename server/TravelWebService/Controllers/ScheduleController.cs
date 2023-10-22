@@ -44,7 +44,8 @@ namespace TravelWebService.Controllers
 
             return CreatedAtAction(nameof(Get), Schedule);
         }
-        //Update Calss
+
+        //Update Schedule
         [HttpPut("{id:length(24)}")]
         public async Task<IActionResult> Update(string id, Shedule updatedSchedule)
         {
@@ -59,9 +60,9 @@ namespace TravelWebService.Controllers
 
             if(schedule.Status != updatedSchedule.Status)
             {
-               var reservation = _reservatinService.GetBySchedule(updatedSchedule.Id);
+               var reservation = await _reservatinService.GetBySchedule(updatedSchedule.Id);
 
-                if (reservation != null)
+                if (reservation.Count > 0)
                 {
                     return BadRequest("There are existing reservations associated with this schedule ");
                 }
@@ -76,17 +77,16 @@ namespace TravelWebService.Controllers
                 await _sheduleService.UpdateAsync(id, updatedSchedule);
             }
 
-
             return Ok("Schedule has been successfully Edited.");
         }
 
-        //Delete Class
+        //Delete Schedule
         [HttpDelete("{id:length(24)}")]
         public async Task<IActionResult> Delete(string id)
         {
-            var book = await _sheduleService.GetAsync(id);
+            var schedule = await _sheduleService.GetAsync(id);
 
-            if (book is null)
+            if (schedule is null)
             {
                 return NotFound();
             }
@@ -95,6 +95,7 @@ namespace TravelWebService.Controllers
 
             return NoContent();
         }
+
         //Find shedules by Frm And To
         [HttpGet("tour")]
         public async Task<List<Shedule>> GetByTour(string from, string to)
@@ -103,6 +104,16 @@ namespace TravelWebService.Controllers
 
             return schedule;
         }
+
+        //Find Schedules by trainID
+        [HttpGet("train/{trainID}")]
+        public async Task<List<Shedule>> GetByTrain(string trainID)
+        {
+            var schedule = await _sheduleService.FindSchedulesByTrain(trainID);
+
+            return schedule;
+        }
+
 
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
 using MongoDB.Driver;
+using System.Globalization;
 using TravelWebService.Model;
 
 namespace TravelWebService.Services
@@ -39,7 +40,23 @@ namespace TravelWebService.Services
         public async Task<List<Reservations>> GetByCreatedUser (string id) =>
           await _reservationCollection.Find(x => x.CreatedBy == id).ToListAsync();
 
-        public async Task<List<Reservations>> GetBySchedule (string id) =>
-         await _reservationCollection.Find(x => x.ScheduleID == id).ToListAsync();
+        public async Task<List<Reservations>> GetBySchedule (string id)
+        {
+            var reservations = await _reservationCollection.Find(x => x.ScheduleID == id).ToListAsync();
+
+            DateTime date = DateTime.Today;
+
+            List<Reservations> sortedlist = new List<Reservations>();
+            reservations.ForEach(reservation => {
+                DateTime date1 = DateTime.ParseExact(reservation.Date, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                if (date < date1)
+                {
+                    sortedlist.Add(reservation);
+                }
+            });
+
+
+            return sortedlist;
+        }
     }
 }

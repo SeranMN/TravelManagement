@@ -6,43 +6,32 @@ import axios from "axios";
 import { Chip } from '@mui/material';
 
 const Profile = () => {
-
-  
+  const id = sessionStorage.getItem('id')
+  const sessionName = sessionStorage.getItem('name')
+  const sesssionEmail = sessionStorage.getItem('email')
+  const sessionPhoneNumber = sessionStorage.getItem('phoneNumber')
+  const sessionstatus = sessionStorage.getItem('status')
   const [name, setName] = useState('');
-  const [NIC, setNIC] = useState();
-  const [email, setEmail] = useState();
-  const [phone, setPhone] = useState();
+  const [NIC, setNIC] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
   const [status, setStatus] = useState();
   const [profileData, setProfileData] = useState();
   const [isDataChanged, setIsDataChanged] = useState(false);
   const [toggle, setToggle] = useState(false)
 
   useEffect(() => {
-    const getData = async () => {
-      axios.get(`http://localhost:5000/api/user/${"992511273v"}`)
-        .then((res) => {
-          console.log("res.data", res.data)
-          setProfileData(res.data)
-        })
-        .catch((err) => console.log(err))
-    }
-    getData()
-  }, [toggle])
-
-  useEffect(() => {
-    if (profileData) {
-      setNIC(profileData.id)
-      setName(profileData.name)
-      setEmail(profileData.email)
-      setPhone(profileData.phoneNumber)
-      setStatus(profileData.status)
-    }
-  }, [profileData])
+      setNIC(id)
+      setName(sessionName)
+      setEmail(sesssionEmail)
+      setPhone(sessionPhoneNumber)
+      setStatus(sessionstatus)
+  }, [id, sessionName, sesssionEmail, sessionPhoneNumber, sessionstatus])
 
   useEffect(() => {
     setIsDataChanged(
-      (profileData && (profileData.id !== NIC || profileData.name !== name || profileData.email !== email || profileData.phoneNumber !== phone || profileData.status !== status))
-    );
+      (id !== NIC || sessionName !== name || sesssionEmail !== email || sessionPhoneNumber !== phone || sessionstatus !== status)
+    )
   }, [ NIC, name, email, phone, status])
 
   const onSubmit = () => {
@@ -56,7 +45,7 @@ const Profile = () => {
     }
 
     axios.put(`http://localhost:5000/api/user/${NIC}`, user)
-        .then(() => {
+        .then((res) => {
             alert("sucess")
             setToggle(!toggle)
         }).catch((err) => {

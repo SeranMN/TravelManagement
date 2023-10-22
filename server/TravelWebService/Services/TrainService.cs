@@ -7,6 +7,7 @@ namespace TravelWebService.Services
     public class TrainService
     {
         private readonly IMongoCollection<train> _trainCollection;
+        private readonly IMongoCollection<Shedule> _sheduleCollection;
 
         public TrainService(
             IOptions<UserDatabaseSettings> userDatabaseSettings)
@@ -19,6 +20,9 @@ namespace TravelWebService.Services
 
             _trainCollection = mongoDatabase.GetCollection<train>(
                 userDatabaseSettings.Value.trainCollectionName);
+
+            _sheduleCollection = mongoDatabase.GetCollection<Shedule>(
+               userDatabaseSettings.Value.scheduleCollectionName);
         }
 
         public async Task<List<train>> GetAsync() =>
@@ -33,8 +37,11 @@ namespace TravelWebService.Services
         public async Task UpdateAsync(string id, train updatedTrain) =>
             await _trainCollection.ReplaceOneAsync(x => x.Id == id, updatedTrain);
 
-        public async Task RemoveAsync(string id) =>
+        public async Task RemoveAsync(string id)
+        {
             await _trainCollection.DeleteOneAsync(x => x.Id == id);
+            await _sheduleCollection.DeleteManyAsync(x => x.TrainId == id);
+        }
 
 
     }

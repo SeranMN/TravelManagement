@@ -59,6 +59,8 @@ BootstrapDialogTitle.propTypes = {
 };
 
 const EditBooking = ({ open, handleClose, data, toggle, setToggle, setMsg, SetSeverity, handleClick }) => {
+    const sessionID = sessionStorage.getItem('id')
+
     return (
         <BootstrapDialog
             onClose={handleClose}
@@ -96,7 +98,7 @@ const EditBooking = ({ open, handleClose, data, toggle, setToggle, setMsg, SetSe
                         to: data.to,
                         count: values.count,
                         date: formattedDate,
-                        createdBy: '992511273v'
+                        createdBy: sessionID
                     }
                     axios.put(`http://localhost:5000/api/reservation/${data.id}`, reservation)
                         .then(() => {

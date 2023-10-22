@@ -26,7 +26,7 @@ const Train = () => {
              setEdit={setEdit} edit={edit} setData={setData} data= {data} setToggle= {setToggle} toggle={toggle} />
         </Box>
         <Box>
-            <TrainTable handleClickOpen ={handleClickOpen} setEdit={setEdit} setData={setData} toggle= {toggle}/>
+            <TrainTable handleClickOpen ={handleClickOpen} setEdit={setEdit} setData={setData} toggle= {toggle} setToggle={setToggle}/>
         </Box>
 
     </Box>
