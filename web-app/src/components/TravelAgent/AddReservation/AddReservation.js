@@ -30,6 +30,8 @@ const AddReservation = () => {
     const [trainName, setTrainName] = useState()
     const [severity, SetSeverity] = useState("");
     const [msg, setMsg] = useState("");
+    const sessionID = sessionStorage.getItem('id')
+
 
     const [openSnack, setOpenSnack] = useState(false);
 
@@ -132,7 +134,7 @@ const AddReservation = () => {
                                 to: train.end,
                                 count: values.count,
                                 date: formattedDate,
-                                createdBy: '992511273v'
+                                createdBy: sessionID
                             }
                             axios.post('http://localhost:5000/api/reservation', reservation)
                                 .then(() => {

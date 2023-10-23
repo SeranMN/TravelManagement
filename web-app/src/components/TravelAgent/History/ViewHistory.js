@@ -14,12 +14,12 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 });
 
 const ViewHistory = () => {
-
+    const sessionID = sessionStorage.getItem('id')
     const [bookings, setBookings] = useState()
 
     useEffect(() => {
         const getBookings = async () => {
-            axios.get(`http://localhost:5000/api/reservation/getHistory/${"992511273v"}`)
+            axios.get(`http://localhost:5000/api/reservation/getHistory/${sessionID}`)
                 .then((res) => {
                     console.log("res.data", res.data)
                     setBookings(res.data)

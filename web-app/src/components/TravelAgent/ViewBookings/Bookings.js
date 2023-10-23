@@ -20,6 +20,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 });
 
 const Bookings = () => {
+  const sessionID = sessionStorage.getItem('id')
   const [bookings, setBookings] = useState()
   const navigate = useNavigate();
   const [deleteModel, setDeleteModel] = useState(false);
@@ -33,7 +34,7 @@ const Bookings = () => {
 
   useEffect(() => {
     const getBookings = async () => {
-      axios.get(`http://localhost:5000/api/reservation/getUpcoming/${"992511273v"}`)
+      axios.get(`http://localhost:5000/api/reservation/getUpcoming/${sessionID}`)
         .then((res) => {
           setBookings(res.data)
         })

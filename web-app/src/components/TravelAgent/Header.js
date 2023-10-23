@@ -42,9 +42,18 @@ function Header() {
     };
 
     const handleSettingClick = (setting) => {
-        if(setting == "Profile") {
+        if (setting == "Profile") {
             navigate('/profile')
             handleCloseUserMenu()
+        }
+        else {
+            sessionStorage.removeItem('role')
+            sessionStorage.removeItem('id')
+            sessionStorage.removeItem('name')
+            sessionStorage.removeItem('phoneNumber') 
+            sessionStorage.removeItem('email')
+            sessionStorage.removeItem('status')
+            navigate('/')
         }
     }
 
@@ -58,7 +67,7 @@ function Header() {
                             variant="h6"
                             noWrap
                             component="a"
-                            href="/tavelAgentHome"
+                            href="/travelAgentHome"
                             sx={{
                                 mr: 2,
                                 display: { xs: 'none', md: 'flex' },
@@ -131,8 +140,8 @@ function Header() {
                         {/* desktop */}
                         <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, px: 15 }}>
                             <Button
-                                onClick={() => navigate('/tavelAgentHome')}
-                                sx={{ my: 2, mx: 1,  display: 'block', color: location.pathname === '/tavelAgentHome' ? 'gold' : 'white', }}
+                                onClick={() => navigate('/travelAgentHome')}
+                                sx={{ my: 2, mx: 1,  display: 'block', color: location.pathname === '/travelAgentHome' ? 'gold' : 'white', }}
                             >
                                 Home
                             </Button>
