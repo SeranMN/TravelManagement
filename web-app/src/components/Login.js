@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, forwardRef } from 'react'
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -11,17 +11,36 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
+import MuiAlert from "@mui/material/Alert";
+import Snackbar from "@mui/material/Snackbar"
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Logo from '../train.jpg'
+
+
+const Alert = forwardRef(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 const Login = () => {
     const theme = createTheme();
     const [userName, setUserName] = useState('')
     const [password, setPassword] = useState('')
     const [toggle, setToggle] = useState(false);
+
+    const [openSnack, setOpenSnack] = useState(false);
+    const [severity, SetSeverity] = useState("");
+    const [msg, setMsg] = useState("");
     const navigate = useNavigate()
+
+    const handleCloseSnack = (event, reason) => {
+        if (reason === "clickaway") {
+            return;
+        }
+
+        setOpenSnack(false);
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -43,13 +62,19 @@ const Login = () => {
                     else if(data.data.role === "Admin") {
                         navigate('/adminHome')
                     }
-                } else {
-                    alert("wrong Credentials")
-                }
+                } 
 
             }).catch((err) => {
                 console.log(err)
-                alert("wrong Credentials")
+                if (err.response && err.response.status === 400) {
+                    setMsg(err.response.data);
+                    SetSeverity("error");
+                    setOpenSnack(true)
+                } else {
+                    setMsg("oops! Somthing Went Wrong");
+                    SetSeverity("error");
+                    setOpenSnack(true)
+                }
             })
     }
 
@@ -92,7 +117,7 @@ const Login = () => {
                                 required
                                 fullWidth
                                 id="userName"
-                                label="User Name"
+                                label="User Name (NIC)"
                                 name="userName"
                                 autoComplete="userName"
                                 onChange={(e) => setUserName(e.target.value)}
@@ -147,6 +172,15 @@ const Login = () => {
                     </Box>
                 </Grid>
             </Grid>
+            <Snackbar open={openSnack} autoHideDuration={3000} onClose={handleCloseSnack} anchorOrigin={{
+                vertical: "top",
+                horizontal: "right"
+            }}>
+
+                <Alert onClose={handleCloseSnack} severity={severity} sx={{ width: '100%' }}>
+                    {msg}
+                </Alert>
+            </Snackbar>
         </ThemeProvider>
     )
 }

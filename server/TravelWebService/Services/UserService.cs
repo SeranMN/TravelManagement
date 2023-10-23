@@ -30,8 +30,18 @@ namespace TravelWebService.Services
         public async Task CreateAsync(User newBook) =>
             await _userCollection.InsertOneAsync(newBook);
 
-        public async Task UpdateAsync(string id, User updatedUser) =>
-            await _userCollection.ReplaceOneAsync(x => x.Id == id, updatedUser);
+        public async Task UpdateAsync(string id, User updatedUser)
+        {
+            var filter = Builders<User>.Filter.Eq(x => x.Id, id);
+            var update = Builders<User>.Update
+                .Set(x => x.Name, updatedUser.Name)
+                .Set(x => x.PhoneNumber, updatedUser.PhoneNumber)
+                .Set(x => x.Email, updatedUser.Email)
+                .Set(x => x.Status, updatedUser.Status);
+
+            await _userCollection.UpdateOneAsync(filter, update);
+
+        }
 
         public async Task RemoveAsync(string id) =>
             await _userCollection.DeleteOneAsync(x => x.Id == id);

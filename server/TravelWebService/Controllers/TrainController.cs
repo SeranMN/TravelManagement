@@ -58,9 +58,24 @@ namespace TravelWebService.Controllers
 
             updatedTrain.Id = train.Id;
 
-            await _TrainService.UpdateAsync(id, updatedTrain);
+            if(updatedTrain.Status == false)
+            {
+                var trainSchedules = await _ScheduleService.FindSchedulesByTrain(id);
 
-            return NoContent();
+                foreach (var trainSchedule in trainSchedules)
+                {
+                    var reservation = await _ReservationServices.GetBySchedule(trainSchedule.Id);
+                    if (reservation.Count > 0)
+                    {
+                        return BadRequest("There is an existing reservation for this train.");
+                    }
+                   
+                }
+            }
+
+             await _TrainService.UpdateAsync(id, updatedTrain);
+
+            return Ok();
         }
 
         //Delete Train

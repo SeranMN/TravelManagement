@@ -30,14 +30,21 @@ namespace TravelWebService.Controller
                 return NotFound();
             }
             else if (user.Password.Equals(password))
-             {
+            {
+                if(user.Status == true)
+                {
                     return user;
-             }
-             else
-               {
-                    return BadRequest("pawssword not valid");
-             }
-            
+                }
+                else
+                {
+                    return BadRequest("Inactive User");
+                }
+            }
+            else
+            {
+                return BadRequest("pawssword is not valid");
+            }
+
         }
         // Create User
         [HttpPost]

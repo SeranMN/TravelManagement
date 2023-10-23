@@ -58,7 +58,7 @@ namespace TravelWebService.Controllers
 
             updatedSchedule.Id = schedule.Id;
 
-            if(schedule.Status != updatedSchedule.Status)
+            if(updatedSchedule.Status == false)
             {
                var reservation = await _reservatinService.GetBySchedule(updatedSchedule.Id);
 
