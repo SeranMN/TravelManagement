@@ -41,7 +41,7 @@ public interface ApiService {
     @POST("api/User")
     Call <User> CreateUser (@Body User user);
 
-    @PUT("api/User/deactivate/{id")
+    @PUT("api/User/deactivate/{id}")
     Call <User> DeactivateUser (@Path("id")String id);
 
     @PUT("api/User/{id}")
