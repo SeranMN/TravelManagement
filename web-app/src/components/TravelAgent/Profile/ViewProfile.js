@@ -1,9 +1,10 @@
 import { React, useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
-import { Button, Card, CardContent, Typography } from "@mui/material";
+import { Button, Card, CardContent, Stack, Typography } from "@mui/material";
 import axios from "axios";
 import { Chip } from '@mui/material';
+import DeactivateAccountModel from "./DeactivateAccountModel";
 
 const Profile = () => {
   const id = sessionStorage.getItem('id')
@@ -19,6 +20,7 @@ const Profile = () => {
   const [profileData, setProfileData] = useState();
   const [isDataChanged, setIsDataChanged] = useState(false);
   const [toggle, setToggle] = useState(false)
+  const [deactivate, setDeactivate] = useState(false)
 
   useEffect(() => {
       setNIC(id)
@@ -33,6 +35,10 @@ const Profile = () => {
       (id !== NIC || sessionName !== name || sesssionEmail !== email || sessionPhoneNumber !== phone || sessionstatus !== status)
     )
   }, [ NIC, name, email, phone, status])
+
+  const handleCloseDeActivate = () => {
+    setDeactivate(false)
+  }
 
   const onSubmit = () => {
     const user = {
@@ -67,9 +73,14 @@ const Profile = () => {
         }}
       >
         <Card sx={{ width: 650 }}>
-          <Box sx={{ textAlign: 'right', mr: 2 }}>
+          <Stack sx={{mr: 4}} spacing={5} direction={"row"} alignItems={"center"} justifyContent={"flex-end"}>
             {status ? <Chip color="success" label={"Active"} sx={{ ml: 2 }} /> : <Chip color="error" label={"Deactive"} sx={{ ml: 2 }} />}
-          </Box>
+            <Button onClick={() => setDeactivate(true)} color="error" variant="contained" sx={{ textAlign: 'right' }}>
+                Deactivate My Account
+            </Button>
+          </Stack>
+          {deactivate && <DeactivateAccountModel deactivate={deactivate} handleCloseDeActivate={handleCloseDeActivate} userId ={id}/>}
+       
           <CardContent
             component="img"
             src="/icons8-male-user-96.png"

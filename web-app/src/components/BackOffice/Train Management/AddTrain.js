@@ -133,9 +133,15 @@ const AddTrain = ({open, handleClickOpen, handleClose, edit, setEdit, data, setD
                                 setToggle(!toggle)
                                 handleClose()
                             }).catch((err) => {
-                                setMsg("oops! Somthing Went Wrong")
-                                SetSeverity("error");
-                                handleClick()
+                                if (err.response && err.response.status === 400) {
+                                    setMsg(err.response.data);
+                                    SetSeverity("error");
+                                    handleClick()
+                                } else {
+                                    setMsg("oops! Somthing Went Wrong");
+                                    SetSeverity("error");
+                                    handleClick()
+                                }
                             })
                         }
                         else {
