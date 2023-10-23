@@ -62,7 +62,7 @@ public class UserEditFragment extends Fragment {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                User updateUser = new User(nic.toString(),name.toString(),email.toString(),phoneNo.toString());
+                User updateUser = new User(nic.getText().toString(),name.getText().toString(),email.getText().toString(),phoneNo.getText().toString());
 
                 apiService.UpdateUser(userId,updateUser).enqueue(new Callback<User>() {
                     @Override
